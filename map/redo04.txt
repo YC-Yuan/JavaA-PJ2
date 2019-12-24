@@ -1,0 +1,17 @@
+bbbbbbbbbbbbb
+bbbbbbybbbbbb
+bbbbbbabbbbbb
+bbbbbbabbbbbb
+bbbbbaxabbbbb
+bbbbbaaabbbbb
+bbbbbbwbbbbbb
+bpppuaaaupppb
+bbbbbaaabbbbb
+bnbpsaaaspbmb
+bnbbbaaabbbmb
+bnppwajawoomb
+bbbbbbbbbbbbb
+0 10 6
+1 0
+1000 10 10 0
+0 0 0
