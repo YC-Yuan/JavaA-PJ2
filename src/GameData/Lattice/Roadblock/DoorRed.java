@@ -10,5 +10,5 @@ public class DoorRed extends Lattice {
 
     public String getCode() {return "w";}
 
-    public String getGraphic() {return "file:pic/Roadblock/DoorRed.png";}
+    public String getGraphic() {return "file:pic/Lattice/Roadblock/DoorRed.png";}
 }

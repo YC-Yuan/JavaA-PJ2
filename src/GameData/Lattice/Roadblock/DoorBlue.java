@@ -11,5 +11,5 @@ public class DoorBlue extends Lattice {
 
     public String getCode() {return "u";}
 
-    public String getGraphic() {return "file:pic/Roadblock/DoorBlue.png";}
+    public String getGraphic() {return "file:pic/Lattice/Roadblock/DoorBlue.png";}
 }

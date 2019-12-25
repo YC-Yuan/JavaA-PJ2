@@ -10,5 +10,5 @@ public class DoorYellow extends Lattice {
 
     public String getCode() {return "s";}
 
-    public String getGraphic() {return "file:pic/Roadblock/DoorYellow.png";}
+    public String getGraphic() {return "file:pic/Lattice/Roadblock/DoorYellow.png";}
 }

@@ -6,12 +6,18 @@ public class Player extends Lattice {
     public String getGraphic() {return "file:pic/Lattice/Player.png";}
 
     //变量声明
-    private int floor, health, healthMax, experience, level, attack, defence, money, keyYellowNum, keyBlueNum, keyRedNum;
-    private int[] position, oldPosition;
+    private int floor, oldFloor, health, healthMax, experience, level, attack, defence, money, keyYellowNum, keyBlueNum, keyRedNum;
+    private int[] position = new int[2], oldPosition = new int[2];
 
     //基本方法
+    public void setPlayer(int flo,int X,int Y,int lv,int exp,int hp,int hpMax,int atk,int def,int mon,int ky,int kb,int kr) {
+        floor = flo; position[0] = X; position[1] = Y; level = lv; experience = exp; health = hp; healthMax = hpMax;
+        attack = atk; defence = def; money = mon; keyYellowNum = ky; keyBlueNum = kb; keyRedNum = kr;
+    }
+
     public int getFloor() { return floor; }
-    public void changeFloor(int change) { floor += change; }
+    public int getOldFloor() {return oldFloor;}
+    void changeFloor(int change) { oldFloor = floor; floor += change; }
 
     public int getHealth() {return health;}
     public void changeHealth(int change) {health = Math.min(healthMax,Math.min(0,health += change));}
@@ -53,8 +59,9 @@ public class Player extends Lattice {
 
     //位置相关
     public int[] getPosition() {return position;}
-    public void moveTo(int[] move) {oldPosition = position; position[0] += move[0]; position[1] += move[1];}
-    public void moveCancel() {position = oldPosition;}
+    public int[] getOldPosition() {return oldPosition;}
+    public void move(int[] move) {oldPosition = position.clone(); position[0] += move[0]; position[1] += move[1];}
+    public void moveCancel() {position = oldPosition.clone();}
 
     //位置检查
     public boolean isHere(int row,int column) {return position[0] == row & position[1] == column;}

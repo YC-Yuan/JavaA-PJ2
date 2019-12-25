@@ -1,6 +1,6 @@
 bbbbbbbbbbbbb
-bbbbbbbbbbbbb
-bblaabibaakbb
+blabbbibbbakb
+bbaaababaaabb
 bbbaababaabbb
 bbbbabcbabbbb
 bbbbaaaaabbbb
@@ -13,5 +13,5 @@ bbbbbbbbbbbbb
 bbbbbbbbbbbbb
 0 10 6
 1 0
-1000 10 10 0
+1000 1000 10 10 0
 0 0 0

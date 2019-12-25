@@ -9,6 +9,5 @@ public class Merchant extends Lattice {
     }
 
     public String getCode() {return "k";}
-
-    public String getGraphic() {return "file:pic/Npc/Merchant.png";}
+    public String getGraphic() {return "file:pic/Lattice/Npc/Merchant.png";}
 }

@@ -9,6 +9,6 @@ public class Wall extends Lattice {
     }
 
     public String getCode() {return "b";}
-    public String getGraphic() {return "file:pic/Roadblock/Wall.png";}
+    public String getGraphic() {return "file:pic/Lattice/Roadblock/Wall.png";}
     public String getAudio(){return "file:audio/撞墙.mp3";}
 }

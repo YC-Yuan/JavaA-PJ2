@@ -10,5 +10,5 @@ public class Veteran extends Lattice {
 
     public String getCode() {return "l";}
 
-    public String getGraphic() {return "file:pic/Npc/Veteran.png";}
+    public String getGraphic() {return "file:pic/Lattice/Npc/Veteran.png";}
 }
