@@ -1,10 +1,12 @@
 package GameData.Lattice;
 
+import GUI.Game;
+
 public class Lattice {
     public Lattice() {
     }
 
-    public void affectWith(Player player) {}
+    public void affectWith(Game game,Player player) {}
 
     public String getCode() {
         return "a";}

@@ -1,11 +1,12 @@
 package GameData.Lattice.Monster;
 
+import GUI.Game;
 import GameData.Lattice.Player;
 
 public class StoneMan extends Monster {
     public StoneMan() { this.hp = 70; this.atk = 60; this.def = 50; this.mon = 8; this.exp = 200; this.name = "石头人"; }
 
-    public void affectWith(Player player) {
+    public void affectWith(Game game,Player player) {
         fightWith(player);
     }
 

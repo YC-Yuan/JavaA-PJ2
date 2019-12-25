@@ -1,18 +1,27 @@
 /*按钮样式*/
 .button {
-    -fx-font-size: 30;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 80px;
+    -fx-font: 30px SimHei;
     -fx-text-fill: #FFFFFF;
-    -fx-background-image: url('file:pic/Background/按钮背景.jpg');
+    -fx-background-image: url('file:pic/Background/菜单按钮背景1.jpg');
 }
 
 /*按钮被按到时*/
 .button:hover {
-    -fx-font-size: 26;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 80px;
+    -fx-font: 25px SimHei;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-image: url('file:pic/Background/菜单按钮背景2.jpg');
 }
 
 /*文本样式*/
 #title {
     -fx-font-size: 90;
+    -fx-text-fill: linear-gradient(from 0% 0% to 100% 200%,repeat,red 0%,rebeccapurple 50%);
+    -fx-stroke: #376e37;
+    -fx-stroke-width: 1px;
 }
 
 VBox {

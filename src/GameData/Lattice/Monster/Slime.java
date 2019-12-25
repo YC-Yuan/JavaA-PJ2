@@ -1,5 +1,6 @@
 package GameData.Lattice.Monster;
 
+import GUI.Game;
 import GameData.Lattice.Player;
 
 public class Slime extends Monster {
@@ -11,7 +12,7 @@ public class Slime extends Monster {
 
     private int criticalTimes = 0, dodgeTimes = 0, criticalChance;
 
-    public void affectWith(Player player) {
+    public void affectWith(Game game,Player player) {
         fightWith(player);
     }
 

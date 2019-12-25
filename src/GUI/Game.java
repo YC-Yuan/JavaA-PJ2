@@ -21,7 +21,7 @@ import java.util.Stack;
 
 public class Game extends Application {
     //游戏初始化
-    private static int turn = 0, maxTurn = 0;
+    private int turn = 0, maxTurn = 0;
     private MotaGame motaGame = Map.mapLoad("redo",turn);
     Game() throws FileNotFoundException {}
     //GUI设定
@@ -79,7 +79,14 @@ public class Game extends Application {
             if (e.getCode() == KeyCode.S) motaGame.move(this,new int[] {1,0});
             if (e.getCode() == KeyCode.A) motaGame.move(this,new int[] {0,-1});
             if (e.getCode() == KeyCode.D) motaGame.move(this,new int[] {0,1});
+            if (e.getCode() == KeyCode.Z) {
+                try { gameSave(); } catch (FileNotFoundException ex) { ex.printStackTrace(); }
+            }
+            if (e.getCode() == KeyCode.X) {
+                try { gameLoad(); } catch (FileNotFoundException ex) { ex.printStackTrace(); }
+            }
         });
+        //按钮事件
 
         stage.setResizable(false);//窗口不能伸缩
         stage.setTitle("Java魔塔");//设定窗口名称
@@ -132,5 +139,51 @@ public class Game extends Application {
                 gamePlayground.add(imageView,j,i);
             }
         }
+    }
+
+    //启动游戏
+    public void gameStart() throws FileNotFoundException {
+        motaGame = Map.mapLoad("redo",turn);
+        setGamePlayground(motaGame);
+    }
+
+    //游戏存档
+    public void gameSave() throws FileNotFoundException {
+        Map.mapSave("save",motaGame,0);
+    }
+
+    //游戏读档
+    public void gameLoad() throws FileNotFoundException {
+        motaGame = Map.mapLoad("save",0);
+        setGamePlayground(motaGame);
+    }
+
+    //撤销
+    public void gameUndo() throws FileNotFoundException {
+        if (turn > 0) {
+            turn--;
+            motaGame = Map.mapLoad("redo",turn);
+            setGamePlayground(motaGame);
+        }//防止过度撤销
+    }
+
+    //重做
+    public void gameRedo() throws FileNotFoundException {
+        if (turn < maxTurn) {
+            turn++;
+            motaGame = Map.mapLoad("redo",turn);
+            setGamePlayground(motaGame);
+        }//防止过度重做
+    }
+
+    //每轮为重做存档
+    public void gameSaveForUndo() throws FileNotFoundException {
+        updateTurn();
+        Map.mapSave("redo",motaGame,turn);
+    }
+    //轮次增加
+    private void updateTurn() {
+        turn++;
+        maxTurn = Math.max(turn,maxTurn);
     }
 }

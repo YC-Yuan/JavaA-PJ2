@@ -1,5 +1,6 @@
 package GameData.Lattice.Monster;
 
+import GUI.Game;
 import GameData.Lattice.Player;
 
 public class Skeleton extends Monster {
@@ -15,7 +16,7 @@ public class Skeleton extends Monster {
 
     private int criticalChance, criticalTime = 0;
 
-    public void affectWith(Player player) {
+    public void affectWith(Game game,Player player) {
         fightWith(player);
     }
 

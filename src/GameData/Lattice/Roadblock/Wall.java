@@ -1,10 +1,11 @@
 package GameData.Lattice.Roadblock;
 
+import GUI.Game;
 import GameData.Lattice.Lattice;
 import GameData.Lattice.Player;
 
 public class Wall extends Lattice {
-    public void affectWith(Player player) {
+    public void affectWith(Game game,Player player) {
         player.moveCancel();
     }
 

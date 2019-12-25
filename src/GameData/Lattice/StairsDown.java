@@ -1,7 +1,9 @@
 package GameData.Lattice;
 
+import GUI.Game;
+
 public class StairsDown extends Lattice{
-    public void affectWith(Player player) {
+    public void affectWith(Game game,Player player) {
         player.changeFloor(-1);
     }
 

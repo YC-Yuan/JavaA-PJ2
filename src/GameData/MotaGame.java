@@ -16,7 +16,7 @@ public class MotaGame {
     public void move(Game game,int[] move) {
         player.move(move);//改变勇者位置
         //新位置处的对象与勇者交互
-        map[player.getFloor()][player.getPosition()[0]][player.getPosition()[1]].affectWith(player);
+        map[player.getFloor()][player.getPosition()[0]][player.getPosition()[1]].affectWith(game,player);
         //如果勇者原本的位置不是楼梯，就变成空地
         String oldPositionCode = map[player.getOldFloor()][player.getOldPosition()[0]][player.getOldPosition()[1]].getCode();
         if (!(oldPositionCode.equals("i") | oldPositionCode.equals("j")))

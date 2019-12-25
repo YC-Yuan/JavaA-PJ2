@@ -16,6 +16,7 @@ public class StartMenu extends Application {
         //vBox.getStylesheets().add("GUI/startMenu.css");
 
         Text title = new Text("Mota 魔塔");
+        title.setId("title");
         Button start = new Button("Start");
         Button load = new Button("Load");
         Button exit = new Button("Exit ");

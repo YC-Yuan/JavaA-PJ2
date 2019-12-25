@@ -1,5 +1,6 @@
 package GameData.Lattice.Monster;
 
+import GUI.Game;
 import GameData.Lattice.Player;
 
 public class Bat extends Monster {
@@ -11,7 +12,7 @@ public class Bat extends Monster {
         this.poisonRate = poisonRate; this.poisonDamage = poisonDamage; this.name = name;
     }
 
-    public void affectWith(Player player) {
+    public void affectWith(Game game,Player player) {
         fightWith(player);
     }
 
