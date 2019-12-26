@@ -7,5 +7,5 @@ public class BatSmall extends Bat{
 
     public String getCode(){return "f";}
     public String getGraphic(){return "file:pic/Lattice/Monster/BatSmall.png";}
-    public String getAudio(){return "file:audio/蝙蝠.mp3";}
+    public String getAudio(){return "audio/蝙蝠.mp3";}
 }

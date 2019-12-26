@@ -3,11 +3,15 @@ package GameData.Lattice.Monster;
 import GUI.Game;
 import GameData.Lattice.Player;
 
+import java.io.FileNotFoundException;
+
 public class StoneMan extends Monster {
     public StoneMan() { this.hp = 70; this.atk = 60; this.def = 50; this.mon = 8; this.exp = 200; this.name = "石头人"; }
 
-    public void affectWith(Game game,Player player) {
+    public void affectWith(Game game,Player player) throws FileNotFoundException {
         fightWith(player);
+        game.musicAudioPlay(getAudio());
+        game.gameSaveForUndo();
     }
 
     private void fightWith(Player player) {
@@ -55,5 +59,5 @@ public class StoneMan extends Monster {
 
     public String getCode() {return "z";}
     public String getGraphic() {return "file:pic/Lattice/Monster/StoneMan.png";}
-    public String getAudio() {return "file:audio/石头人.mp3";}
+    public String getAudio() {return "audio/石头人.mp3";}
 }

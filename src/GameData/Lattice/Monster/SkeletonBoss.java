@@ -5,5 +5,5 @@ public class SkeletonBoss extends Skeleton {
 
     public String getCode() {return "x";}
     public String getGraphic() {return "file:pic/Lattice/Monster/SkeletonBoss.png";}
-    public String getAudio() {return "file:audio/骷髅.mp3";}
+    public String getAudio() {return "audio/骷髅.mp3";}
 }

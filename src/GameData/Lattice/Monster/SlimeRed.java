@@ -7,5 +7,5 @@ public class SlimeRed extends Slime{
 
     public String getCode() { return "d"; }
     public String getGraphic() { return "file:pic/Lattice/Monster/SlimeRed.png"; }
-    public String getAudio() { return "file:audio/史莱姆.mp3"; }
+    public String getAudio() { return "audio/史莱姆.mp3"; }
 }

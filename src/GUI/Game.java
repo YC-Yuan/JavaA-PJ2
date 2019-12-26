@@ -13,10 +13,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.FileNotFoundException;
+import java.nio.file.Paths;
 import java.util.Stack;
 
 public class Game extends Application {
@@ -44,6 +48,9 @@ public class Game extends Application {
             btInfo = new Button("怪物手册<F>"), btRestart = new Button("重新开始<R>"),
             btBgm = new Button("开关音乐<B>"), btAudio = new Button("开关音效<G>"),
             btHelp = new Button("帮助手册<H>");
+    //音乐播放器声明
+    private MediaPlayer mediaBGM, mediaAudio;
+    private int bgmVolume = 1, audioVolume = 1;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -60,7 +67,7 @@ public class Game extends Application {
         status.getChildren().add(statusPos); status.getChildren().add(statusHpLv);
         status.getChildren().add(statusAbility); status.getChildren().add(statusKey);
         display.getChildren().add(displayText);
-        //游戏区域组件
+        //游戏区组件
         gameArea.getChildren().add(gameBackground); gameArea.getChildren().add(gamePlayground);
         //按钮区组件
         buttons.getChildren().add(btSave); buttons.getChildren().add(btLoad);
@@ -68,23 +75,31 @@ public class Game extends Application {
         buttons.getChildren().add(btInfo); buttons.getChildren().add(btRestart);
         buttons.getChildren().add(btBgm); buttons.getChildren().add(btAudio);
         buttons.getChildren().add(btHelp);
-        //显示区设定
+        //音乐初始化
+        musicBGMPlay("audio/背景音乐.mp3");
+        //屏幕设定
         Scene scene = new Scene(vbox);
         //游戏初始化
         setGameBackground();
         setGamePlayground(motaGame);
         //键盘事件
         scene.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.W) motaGame.move(this,new int[] {-1,0});
-            if (e.getCode() == KeyCode.S) motaGame.move(this,new int[] {1,0});
-            if (e.getCode() == KeyCode.A) motaGame.move(this,new int[] {0,-1});
-            if (e.getCode() == KeyCode.D) motaGame.move(this,new int[] {0,1});
-            if (e.getCode() == KeyCode.Z) {
-                try { gameSave(); } catch (FileNotFoundException ex) { ex.printStackTrace(); }
+            if (e.getCode() == KeyCode.W) { try { motaGame.move(this,new int[] {-1,0}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+            if (e.getCode() == KeyCode.S) { try { motaGame.move(this,new int[] {1,0}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+            if (e.getCode() == KeyCode.A) { try { motaGame.move(this,new int[] {0,-1}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+            if (e.getCode() == KeyCode.D) { try { motaGame.move(this,new int[] {0,1}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+            if (e.getCode() == KeyCode.Z) { try { gameSave(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+            if (e.getCode() == KeyCode.X) { try { gameLoad(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+            if (e.getCode() == KeyCode.B) {
+                if (bgmVolume == 0) { bgmVolume = 1; mediaBGM.setVolume(bgmVolume);}
+                else {bgmVolume = 0; mediaBGM.setVolume(bgmVolume);}
             }
-            if (e.getCode() == KeyCode.X) {
-                try { gameLoad(); } catch (FileNotFoundException ex) { ex.printStackTrace(); }
+            if (e.getCode() == KeyCode.G) {
+                if (audioVolume == 0) audioVolume = 1;
+                else audioVolume = 0;
             }
+            if (e.getCode() == KeyCode.C) { try { gameUndo(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+            if (e.getCode() == KeyCode.V) { try { gameRedo(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
         });
         //按钮事件
 
@@ -96,6 +111,22 @@ public class Game extends Application {
 
     void showWindow() throws Exception {
         start(stage);
+    }
+
+    //音频播放
+    public void musicBGMPlay(String paths) {
+        Media mediaSource = new Media(Paths.get(paths).toUri().toString());
+        mediaBGM = new MediaPlayer(mediaSource);
+        mediaBGM.setVolume(bgmVolume);
+        mediaBGM.setAutoPlay(true);
+        mediaBGM.setCycleCount(40);
+    }
+    //音效播放
+    public void musicAudioPlay(String paths) {
+        Media mediaSource = new Media(Paths.get(paths).toUri().toString());
+        mediaAudio = new MediaPlayer(mediaSource);
+        mediaAudio.setVolume(audioVolume);
+        mediaAudio.setAutoPlay(true);
     }
 
     //生成叠底用GridPane
@@ -148,12 +179,12 @@ public class Game extends Application {
     }
 
     //游戏存档
-    public void gameSave() throws FileNotFoundException {
+    private void gameSave() throws FileNotFoundException {
         Map.mapSave("save",motaGame,0);
     }
 
     //游戏读档
-    public void gameLoad() throws FileNotFoundException {
+    private void gameLoad() throws FileNotFoundException {
         motaGame = Map.mapLoad("save",0);
         setGamePlayground(motaGame);
     }

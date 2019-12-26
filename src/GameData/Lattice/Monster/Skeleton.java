@@ -3,6 +3,8 @@ package GameData.Lattice.Monster;
 import GUI.Game;
 import GameData.Lattice.Player;
 
+import java.io.FileNotFoundException;
+
 public class Skeleton extends Monster {
     Skeleton(int hp,int atk,int def,int mon,int exp,int criticalChance,String name) {
         this.hp = hp;
@@ -16,8 +18,10 @@ public class Skeleton extends Monster {
 
     private int criticalChance, criticalTime = 0;
 
-    public void affectWith(Game game,Player player) {
+    public void affectWith(Game game,Player player) throws FileNotFoundException {
         fightWith(player);
+        game.musicAudioPlay(getAudio());
+        game.gameSaveForUndo();
     }
 
     private void fightWith(Player player) {

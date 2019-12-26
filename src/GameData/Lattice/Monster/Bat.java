@@ -3,6 +3,8 @@ package GameData.Lattice.Monster;
 import GUI.Game;
 import GameData.Lattice.Player;
 
+import java.io.FileNotFoundException;
+
 public class Bat extends Monster {
     private double poisonRate;
     private int poisonDamage, rateDamageSum = 0, poisonDamageSum = 0;
@@ -12,8 +14,10 @@ public class Bat extends Monster {
         this.poisonRate = poisonRate; this.poisonDamage = poisonDamage; this.name = name;
     }
 
-    public void affectWith(Game game,Player player) {
+    public void affectWith(Game game,Player player) throws FileNotFoundException {
         fightWith(player);
+        game.musicAudioPlay(getAudio());
+        game.gameSaveForUndo();
     }
 
     private void fightWith(Player player) {

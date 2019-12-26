@@ -7,9 +7,10 @@ import GameData.Lattice.Player;
 public class Wall extends Lattice {
     public void affectWith(Game game,Player player) {
         player.moveCancel();
+        game.musicAudioPlay(getAudio());
     }
 
     public String getCode() {return "b";}
     public String getGraphic() {return "file:pic/Lattice/Roadblock/Wall.png";}
-    public String getAudio(){return "file:audio/撞墙.mp3";}
+    public String getAudio(){return "audio/撞墙.mp3";}
 }

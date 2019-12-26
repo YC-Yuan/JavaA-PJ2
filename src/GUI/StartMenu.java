@@ -4,12 +4,15 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
 
-public class StartMenu extends Application {
+import java.nio.file.Paths;
 
+public class StartMenu extends Application {
     public void start(Stage primaryStage) {
         VBox vBox = new VBox();
         vBox.setPrefSize(1280,720);
@@ -34,9 +37,18 @@ public class StartMenu extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
+        //音乐设定
+        MediaPlayer mediaBGM;
+        Media mediaSource = new Media(Paths.get("audio/游戏菜单.mp3").toUri().toString());
+        mediaBGM = new MediaPlayer(mediaSource);
+        mediaBGM.setAutoPlay(true);
+        mediaBGM.setCycleCount(5);
+
         //按钮事件绑定
         start.setOnAction(event -> {
-            try { Game game = new Game(); game.showWindow(); primaryStage.close();} catch (Exception ex) {
+            try {
+                Game game = new Game(); game.showWindow(); primaryStage.close(); mediaBGM.stop();
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });

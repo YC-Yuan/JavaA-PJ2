@@ -60,7 +60,7 @@ public class Player extends Lattice {
     //位置相关
     public int[] getPosition() {return position;}
     public int[] getOldPosition() {return oldPosition;}
-    public void move(int[] move) {oldPosition = position.clone(); position[0] += move[0]; position[1] += move[1];}
+    public void move(int[] move) {oldFloor = floor; oldPosition = position.clone(); position[0] += move[0]; position[1] += move[1];}
     public void moveCancel() {position = oldPosition.clone();}
 
     //位置检查

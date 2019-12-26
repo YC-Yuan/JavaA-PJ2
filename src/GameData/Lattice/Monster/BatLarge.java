@@ -8,5 +8,5 @@ public class BatLarge extends Bat{
 
     public String getCode(){return "F";}
     public String getGraphic(){return "file:pic/Lattice/Monster/BatLarge.png";}
-    public String getAudio(){return "file:audio/蝙蝠.mp3";}
+    public String getAudio(){return "audio/蝙蝠.mp3";}
 }

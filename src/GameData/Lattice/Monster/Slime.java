@@ -3,6 +3,8 @@ package GameData.Lattice.Monster;
 import GUI.Game;
 import GameData.Lattice.Player;
 
+import java.io.FileNotFoundException;
+
 public class Slime extends Monster {
     //构造函数
     Slime(int hp,int atk,int def,int mon,int exp,int criticalChance,String name) {
@@ -12,8 +14,10 @@ public class Slime extends Monster {
 
     private int criticalTimes = 0, dodgeTimes = 0, criticalChance;
 
-    public void affectWith(Game game,Player player) {
+    public void affectWith(Game game,Player player) throws FileNotFoundException {
         fightWith(player);
+        game.musicAudioPlay(getAudio());
+        game.gameSaveForUndo();
     }
 
     private void fightWith(Player player) {

@@ -5,5 +5,5 @@ public class SkeletonSoldier extends Skeleton{
 
     public String getCode(){return "h";}
     public String getGraphic(){return "file:pic/Lattice/Monster/SkeletonSoldier.png";}
-    public String getAudio(){return "file:audio/骷髅.mp3";}
+    public String getAudio(){return "audio/骷髅.mp3";}
 }
