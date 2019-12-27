@@ -27,7 +27,9 @@ public class Game extends Application {
     //游戏初始化
     private int turn = 0, maxTurn = 0;
     private MotaGame motaGame = Map.mapLoad("redo",turn);
+
     Game() throws FileNotFoundException {}
+
     //GUI设定
     private final static int LENGTH = 48;
     private final static int PADDLE = 20;
@@ -41,6 +43,7 @@ public class Game extends Application {
     //游戏区域声明
     private StackPane gameArea = new StackPane();
     private GridPane gamePlayground = new GridPane(), gameBackground = new GridPane();
+    private HBox gamePopup=new HBox();
     //按钮区声明
     private HBox buttons = new HBox();
     private Button btSave = new Button("存档<Z>"), btLoad = new Button("读档<X>"),
@@ -49,7 +52,7 @@ public class Game extends Application {
             btBgm = new Button("开关音乐<B>"), btAudio = new Button("开关音效<G>"),
             btHelp = new Button("帮助手册<H>");
     //音乐播放器声明
-    private MediaPlayer mediaBGM, mediaAudio;
+    private MediaPlayer mediaBGM;
     private int bgmVolume = 1, audioVolume = 1;
 
     @Override
@@ -69,12 +72,15 @@ public class Game extends Application {
         display.getChildren().add(displayText);
         //游戏区组件
         gameArea.getChildren().add(gameBackground); gameArea.getChildren().add(gamePlayground);
+        gameArea.getChildren().add(gamePopup);
         //按钮区组件
         buttons.getChildren().add(btSave); buttons.getChildren().add(btLoad);
         buttons.getChildren().add(btUndo); buttons.getChildren().add(btRedo);
         buttons.getChildren().add(btInfo); buttons.getChildren().add(btRestart);
         buttons.getChildren().add(btBgm); buttons.getChildren().add(btAudio);
         buttons.getChildren().add(btHelp);
+        buttons.setPadding(INSETS); buttons.setSpacing(17); buttons.setTranslateX(-5);
+        buttons.setAlignment(Pos.BOTTOM_CENTER); buttonsInit();
         //音乐初始化
         musicBGMPlay("audio/背景音乐.mp3");
         //屏幕设定
@@ -82,6 +88,7 @@ public class Game extends Application {
         //游戏初始化
         setGameBackground();
         setGamePlayground(motaGame);
+        setGamePopup();
         //键盘事件
         scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.W) { try { motaGame.move(this,new int[] {-1,0}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
@@ -90,6 +97,7 @@ public class Game extends Application {
             if (e.getCode() == KeyCode.D) { try { motaGame.move(this,new int[] {0,1}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
             if (e.getCode() == KeyCode.Z) { try { gameSave(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
             if (e.getCode() == KeyCode.X) { try { gameLoad(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+            if (e.getCode() == KeyCode.R) { try { gameStart(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
             if (e.getCode() == KeyCode.B) {
                 if (bgmVolume == 0) { bgmVolume = 1; mediaBGM.setVolume(bgmVolume);}
                 else {bgmVolume = 0; mediaBGM.setVolume(bgmVolume);}
@@ -109,6 +117,15 @@ public class Game extends Application {
         stage.show();
     }
 
+    //功能函数生成特定大小的ImageView
+    public ImageView getImageView(String path,int length){
+        Image image=new Image(path);
+        ImageView imageView=new ImageView(image);
+        imageView.setFitWidth(length);
+        imageView.setFitHeight(length);
+        return imageView;
+    }
+
     void showWindow() throws Exception {
         start(stage);
     }
@@ -121,10 +138,11 @@ public class Game extends Application {
         mediaBGM.setAutoPlay(true);
         mediaBGM.setCycleCount(40);
     }
+
     //音效播放
     public void musicAudioPlay(String paths) {
         Media mediaSource = new Media(Paths.get(paths).toUri().toString());
-        mediaAudio = new MediaPlayer(mediaSource);
+        MediaPlayer mediaAudio = new MediaPlayer(mediaSource);
         mediaAudio.setVolume(audioVolume);
         mediaAudio.setAutoPlay(true);
     }
@@ -190,7 +208,7 @@ public class Game extends Application {
     }
 
     //撤销
-    public void gameUndo() throws FileNotFoundException {
+    private void gameUndo() throws FileNotFoundException {
         if (turn > 0) {
             turn--;
             motaGame = Map.mapLoad("redo",turn);
@@ -199,7 +217,7 @@ public class Game extends Application {
     }
 
     //重做
-    public void gameRedo() throws FileNotFoundException {
+    private void gameRedo() throws FileNotFoundException {
         if (turn < maxTurn) {
             turn++;
             motaGame = Map.mapLoad("redo",turn);
@@ -212,9 +230,36 @@ public class Game extends Application {
         updateTurn();
         Map.mapSave("redo",motaGame,turn);
     }
+
     //轮次增加
     private void updateTurn() {
         turn++;
         maxTurn = Math.max(turn,maxTurn);
+    }
+
+    //弹出框初始化
+    private void setGamePopup(){
+        gamePopup.setAlignment(Pos.CENTER);
+        gamePopup.setStyle("-fx-background-color:rgba(239,221,173,0.8);");
+        gamePopup.setVisible(false);
+        gamePopup.setSpacing(40);
+    }
+
+    //按钮初始化
+    private void buttonsInit() {
+        final int height = 35, width = 123;
+        btAudio.setStyle("-fx-font-size: 16;" + "-fx-text-fill:#FFFFFF;" + "-fx-background-image: url('file:pic/Background/按钮背景.jpg');");
+        btBgm.setStyle("-fx-font-size: 16;" + "-fx-text-fill:#FFFFFF;" + "-fx-background-image: url('file:pic/Background/按钮背景.jpg');");
+        btRestart.setStyle("-fx-font-size: 16;" + "-fx-text-fill:#FFFFFF;" + "-fx-background-image: url('file:pic/Background/按钮背景.jpg');");
+        btHelp.setStyle("-fx-font-size: 16;" + "-fx-text-fill:#FFFFFF;" + "-fx-background-image: url('file:pic/Background/按钮背景.jpg');");
+        btInfo.setStyle("-fx-font-size: 16;" + "-fx-text-fill:#FFFFFF;" + "-fx-background-image: url('file:pic/Background/按钮背景.jpg');");
+        btSave.setStyle("-fx-font-size: 16;" + "-fx-text-fill:#FFFFFF;" + "-fx-background-image: url('file:pic/Background/按钮背景.jpg');");
+        btUndo.setStyle("-fx-font-size: 16;" + "-fx-text-fill:#FFFFFF;" + "-fx-background-image: url('file:pic/Background/按钮背景.jpg');");
+        btLoad.setStyle("-fx-font-size: 16;" + "-fx-text-fill:#FFFFFF;" + "-fx-background-image: url('file:pic/Background/按钮背景.jpg');");
+        btRedo.setStyle("-fx-font-size: 16;" + "-fx-text-fill:#FFFFFF;" + "-fx-background-image: url('file:pic/Background/按钮背景.jpg');");
+        btAudio.setPrefSize(width,height); btBgm.setPrefSize(width,height);
+        btRestart.setPrefSize(width,height); btHelp.setPrefSize(width,height); btInfo.setPrefSize(width,height);
+        btSave.setPrefSize(width,height); btLoad.setPrefSize(width,height);
+        btUndo.setPrefSize(width,height); btRedo.setPrefSize(width,height);
     }
 }
