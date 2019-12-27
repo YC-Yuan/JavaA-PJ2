@@ -9,7 +9,7 @@ public class Bat extends Monster {
     private double poisonRate;
     private int poisonDamage, rateDamageSum = 0, poisonDamageSum = 0;
 
-    Bat(int hp,int atk,int def,int mon,int exp,double poisonRate,int poisonDamage,String name) {
+    public Bat(int hp,int atk,int def,int mon,int exp,double poisonRate,int poisonDamage,String name) {
         this.hp = hp; this.atk = atk; this.def = def; this.mon = mon; this.exp = exp;
         this.poisonRate = poisonRate; this.poisonDamage = poisonDamage; this.name = name;
     }

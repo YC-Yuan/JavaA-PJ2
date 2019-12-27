@@ -22,6 +22,8 @@ public class Monster extends Lattice {
         }
     }
 
+    public String[] fightPlan(Player player) {return new String[9];}
+
     static boolean chanceGenerate(int chance) {//chance为0~100的整数
         double getChance = Math.random() * 100;//[0,100)的小数
         return (getChance < chance);

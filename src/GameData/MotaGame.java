@@ -24,5 +24,7 @@ public class MotaGame {
         //新位置处的对象与勇者交互
         map[player.getFloor()][player.getPosition()[0]][player.getPosition()[1]].affectWith(game,player);
         game.setGamePlayground(this);
+        //状态显示更新
+        game.updateStatus(player);
     }
 }

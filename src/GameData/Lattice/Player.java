@@ -1,6 +1,6 @@
 package GameData.Lattice;
 
-public class Player extends Lattice {
+public class Player extends Lattice implements Cloneable{
     public String getCode() {return "B";}
 
     public String getGraphic() {return "file:pic/Lattice/Player.png";}
@@ -10,6 +10,11 @@ public class Player extends Lattice {
     private int[] position = new int[2], oldPosition = new int[2];
 
     //基本方法
+    @Override
+    public Player clone() throws CloneNotSupportedException {
+        return (Player) super.clone();
+    }
+
     public void setPlayer(int flo,int X,int Y,int lv,int exp,int hp,int hpMax,int atk,int def,int mon,int ky,int kb,int kr) {
         floor = flo; position[0] = X; position[1] = Y; level = lv; experience = exp; health = hp; healthMax = hpMax;
         attack = atk; defence = def; money = mon; keyYellowNum = ky; keyBlueNum = kb; keyRedNum = kr;
@@ -20,7 +25,7 @@ public class Player extends Lattice {
     void changeFloor(int change) { oldFloor = floor; floor += change; }
 
     public int getHealth() {return health;}
-    public void changeHealth(int change) {health = Math.min(healthMax,Math.min(0,health += change));}
+    public void changeHealth(int change) {health = Math.min(healthMax,Math.max(0,health += change));}
 
     public int getHealthMax() {return healthMax;}
     public void changeHealthMax(int change) {healthMax += change;}
@@ -35,20 +40,24 @@ public class Player extends Lattice {
     public void changeMoney(int change) {money += change;}
 
     public int getKeyYellowNum() {return keyYellowNum;}
-    public void changeKeyYellowNum(int change) {keyYellowNum -= change;}
+    public void changeKeyYellowNum(int change) {keyYellowNum += change;}
 
     public int getKeyBlueNum() {return keyBlueNum;}
-    public void changeKeyBlueNum(int change) {keyBlueNum -= change;}
+    public void changeKeyBlueNum(int change) {keyBlueNum += change;}
 
     public int getKeyRedNum() {return keyRedNum;}
-    public void changeKeyRedNum(int change) {keyRedNum -= change;}
+    public void changeKeyRedNum(int change) {keyRedNum += change;}
 
     //等级经验相关
     public int getExperience() {return experience;}
-    public void changeExperience(int change) {experience += change;}
+    public void changeExperience(int change) {experience += change; checkLevel();}
+    public int getExpNeed() {
+        int initialExpNeed = 100; double growthRateExp = 1.6;
+        return (int) (initialExpNeed * Math.pow(growthRateExp,level - 1));
+    }
 
     public int getLevel() {return level;}
-    public void checkLevel() {
+    private void checkLevel() {
         int initialExpNeed = 100; double growthRateExp = 1.6;
         while ((int) (initialExpNeed * Math.pow(growthRateExp,level - 1)) <= experience) {
             experience -= (int) (initialExpNeed * Math.pow(growthRateExp,level - 1));
