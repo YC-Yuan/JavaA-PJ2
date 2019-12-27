@@ -1,0 +1,39 @@
+/*按钮样式*/
+.button {
+    -fx-pref-width: 200px;
+    -fx-pref-height: 80px;
+    -fx-font: 30px swfit_slm_fw;
+    -fx-text-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #d1a143 0%, #ca4bff 50%);
+    -fx-background-image: url('file:pic/Background/菜单按钮背景1.jpg');
+}
+
+/*按钮被按到时*/
+.button:hover {
+    -fx-pref-width: 200px;
+    -fx-pref-height: 80px;
+    -fx-font: 30px swfit_slm_fw;
+    -fx-text-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #ca4bff 0%, #d1a143 50%);
+    -fx-background-image: url('file:pic/Background/菜单按钮背景2.jpg');
+}
+
+/*文本样式*/
+#title {
+    -fx-font-size: 90;
+    -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, #d1a143 0%, #ca4bff 50%);
+    -fx-stroke: #ffffff;
+    -fx-stroke-width: 1px;
+}
+
+VBox {
+    -fx-spacing: 80;
+    -fx-alignment: center;
+}
+
+@font-face {
+    -fx-font-family: swfit_slm_fw;
+    src:url("file:resources/fonts/swfit.ttf");
+}
+
+.root {
+    -fx-background-image: url('file:pic/Background/菜单背景.jpg');
+}

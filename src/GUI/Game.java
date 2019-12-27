@@ -43,7 +43,7 @@ public class Game extends Application {
     private Stage stage = new Stage();
     //显示区声明
     private VBox panel = new VBox(), status = new VBox();
-    private HBox statusHpLv = new HBox(), statusAbility = new HBox(), statusKey = new HBox();
+    private HBox statusLv = new HBox(), statusAbility = new HBox(), statusKey = new HBox();
     private Pane display = new Pane();
     private Text displayText = new Text(20,20,"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     //游戏区域声明
@@ -70,10 +70,13 @@ public class Game extends Application {
         VBox vbox = new VBox();
         vbox.getChildren().add(hbox); vbox.getChildren().add(buttons);
         vbox.setPrefSize(1280,720);
-        vbox.setStyle("-fx-background-image:url('file:pic/Background/背景.jpg')");
+       // vbox.setStyle("-fx-background-image:url('file:pic/Background/背景.jpg')");
+        vbox.setId("background-VBox");
+        vbox.getStylesheets().add("GUI/game.css");
+
         //显示区组件
         panel.getChildren().add(status); status.getChildren().add(display);
-        status.getChildren().add(statusHpLv); status.getChildren().add(statusAbility); status.getChildren().add(statusKey);
+        status.getChildren().add(statusLv); status.getChildren().add(statusAbility); status.getChildren().add(statusKey);
         display.getChildren().add(displayText);
         statusInit();
         //游戏区组件
@@ -144,9 +147,13 @@ public class Game extends Application {
     //功能函数生成像素字体
     public Text getText(String string) {
         Text text = new Text(string);
-        Font font;
-        font = Font.loadFont("C:/Users/AAA/IdeaProjects/Project_2/font/swfit.ttf",100);
-        text.setFont(font);
+        text.setFont(Font.loadFont("file:resources/fonts/swfit.ttf", 20));
+        return text;
+    }
+    public Text getText(int num){
+        String string=String.valueOf(num);
+        Text text = new Text(string);
+        text.setFont(Font.loadFont("file:resources/fonts/swfit.ttf", 20));
         return text;
     }
 
@@ -159,8 +166,9 @@ public class Game extends Application {
         gamePopup.setVisible(true);
         gamePopup.getChildren().clear();
         gamePopup.getChildren().add(getImageView(lattice.getGraphic(),40));
-        gamePopup.getChildren().add(new Text(string));
-        //gamePopup.requestFocus();
+        Text text=new Text(string);
+        text.setFont(Font.loadFont("file:resources/fonts/Zfull-GB.ttf",20));
+        gamePopup.getChildren().add(text);
     }
 
     //BGM播放
@@ -300,9 +308,26 @@ public class Game extends Application {
     }
 
     //显示区初始化
-    private void statusInit() {
-        statusHpLv.getChildren().add(getImageView("file:pic/Status/血量.png",32));
-        statusHpLv.getChildren().add(getText("0/1000"));
+    private void statusInit(Player player) {
+        final int LENGTH=32;
+        statusLv.getChildren().add(getImageView("file:pic/Status/等级.png",LENGTH));
+        statusLv.getChildren().add(getText((player.getLevel()));
+        statusLv.getChildren().add(getImageView("file:pic/Status/经验.png",LENGTH));
+        statusLv.getChildren().add(getText("0/100"));
+        statusAbility.getChildren().add(getImageView("file:pic/Status/血量.png",LENGTH));
+        statusAbility.getChildren().add(getText("0/1000"));
+        statusAbility.getChildren().add(getImageView("file:pic/Status/攻击.png",LENGTH));
+        statusAbility.getChildren().add(getText("10"));
+        statusAbility.getChildren().add(getImageView("file:pic/Status/防御.png",LENGTH));
+        statusAbility.getChildren().add(getText("10"));
+        statusAbility.getChildren().add(getImageView("file:pic/Status/金钱.png",LENGTH));
+        statusAbility.getChildren().add(getText("0"));
+        statusKey.getChildren().add(getImageView("file:pic/Status/黄钥匙.png",LENGTH));
+        statusKey.getChildren().add(getText("0"));
+        statusKey.getChildren().add(getImageView("file:pic/Status/蓝钥匙.png",LENGTH));
+        statusKey.getChildren().add(getText("0"));
+        statusKey.getChildren().add(getImageView("file:pic/Status/红钥匙.png",LENGTH));
+        statusKey.getChildren().add(getText("0"));
 
     }
 }

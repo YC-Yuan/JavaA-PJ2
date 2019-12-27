@@ -1,0 +1,8 @@
+#background-VBox {
+    -fx-background-image: url('file:pic/Background/背景.jpg');
+}
+
+@font-face {
+    -fx-font-family: swfit_slm_fw;
+    src:url("file:resources/fonts/swfit.ttf");
+}

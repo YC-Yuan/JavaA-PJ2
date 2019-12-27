@@ -34,7 +34,7 @@ public class test extends Application{
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        Font myfont=new Font(1000);
+        Font myfont=new Font(1);
 
         List<String> mylist=myfont.getFamilies();
         int i;
