@@ -11,6 +11,7 @@ public class GemAtk extends Lattice {
         player.changeAttack(2);
         game.musicAudioPlay(getAudio());
         game.gameSaveForUndo();
+        game.setGamePopup(this,"捡到攻击宝石,攻击+2");
     }
 
     public String getCode() {return "m";}

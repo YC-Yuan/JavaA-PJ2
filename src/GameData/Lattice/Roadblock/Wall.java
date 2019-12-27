@@ -8,6 +8,7 @@ public class Wall extends Lattice {
     public void affectWith(Game game,Player player) {
         player.moveCancel();
         game.musicAudioPlay(getAudio());
+        game.setGamePopup(this,"撞墙了！");
     }
 
     public String getCode() {return "b";}

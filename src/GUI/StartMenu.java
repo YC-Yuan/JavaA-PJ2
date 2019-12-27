@@ -42,6 +42,7 @@ public class StartMenu extends Application {
         Media mediaSource = new Media(Paths.get("audio/游戏菜单.mp3").toUri().toString());
         mediaBGM = new MediaPlayer(mediaSource);
         mediaBGM.setAutoPlay(true);
+        mediaBGM.setVolume(0.4);
         mediaBGM.setCycleCount(5);
 
         //按钮事件绑定

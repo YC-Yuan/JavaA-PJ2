@@ -18,6 +18,7 @@ public class Bat extends Monster {
         fightWith(player);
         game.musicAudioPlay(getAudio());
         game.gameSaveForUndo();
+        game.setGamePopup(this,name+"被打败了！");
     }
 
     private void fightWith(Player player) {

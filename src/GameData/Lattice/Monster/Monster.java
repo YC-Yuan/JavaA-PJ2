@@ -1,5 +1,6 @@
 package GameData.Lattice.Monster;
 
+import GUI.Game;
 import GameData.Lattice.Lattice;
 import GameData.Lattice.Player;
 

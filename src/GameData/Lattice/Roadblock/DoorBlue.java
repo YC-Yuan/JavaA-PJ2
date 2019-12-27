@@ -8,13 +8,16 @@ import java.io.FileNotFoundException;
 
 public class DoorBlue extends Lattice {
     public void affectWith(Game game,Player player) throws FileNotFoundException {
-        if(player.getKeyBlueNum()==0){ player.moveCancel();}//没钥匙不能动
-        else{player.changeKeyBlueNum(-1);}
+        if (player.getKeyBlueNum() == 0) {
+            player.moveCancel();
+            game.setGamePopup(this,"没有蓝钥匙了！");
+        }
+        else {player.changeKeyBlueNum(-1);}
         game.musicAudioPlay(getAudio());
         game.gameSaveForUndo();
     }
 
     public String getCode() {return "u";}
     public String getGraphic() {return "file:pic/Lattice/Roadblock/DoorBlue.png";}
-    public String getAudio(){return "audio/开门.mp3";}
+    public String getAudio() {return "audio/开门.mp3";}
 }

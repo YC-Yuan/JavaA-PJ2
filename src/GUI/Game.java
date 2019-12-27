@@ -16,10 +16,16 @@ import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import sun.rmi.runtime.Log;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Stack;
 
@@ -37,13 +43,13 @@ public class Game extends Application {
     private Stage stage = new Stage();
     //显示区声明
     private VBox panel = new VBox(), status = new VBox();
-    private HBox statusPos = new HBox(), statusHpLv = new HBox(), statusAbility = new HBox(), statusKey = new HBox();
+    private HBox statusHpLv = new HBox(), statusAbility = new HBox(), statusKey = new HBox();
     private Pane display = new Pane();
     private Text displayText = new Text(20,20,"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     //游戏区域声明
     private StackPane gameArea = new StackPane();
     private GridPane gamePlayground = new GridPane(), gameBackground = new GridPane();
-    private HBox gamePopup=new HBox();
+    private HBox gamePopup = new HBox();
     //按钮区声明
     private HBox buttons = new HBox();
     private Button btSave = new Button("存档<Z>"), btLoad = new Button("读档<X>"),
@@ -53,7 +59,7 @@ public class Game extends Application {
             btHelp = new Button("帮助手册<H>");
     //音乐播放器声明
     private MediaPlayer mediaBGM;
-    private int bgmVolume = 1, audioVolume = 1;
+    private double bgmVolume = 0.4, audioVolume = 1;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -67,9 +73,9 @@ public class Game extends Application {
         vbox.setStyle("-fx-background-image:url('file:pic/Background/背景.jpg')");
         //显示区组件
         panel.getChildren().add(status); status.getChildren().add(display);
-        status.getChildren().add(statusPos); status.getChildren().add(statusHpLv);
-        status.getChildren().add(statusAbility); status.getChildren().add(statusKey);
+        status.getChildren().add(statusHpLv); status.getChildren().add(statusAbility); status.getChildren().add(statusKey);
         display.getChildren().add(displayText);
+        statusInit();
         //游戏区组件
         gameArea.getChildren().add(gameBackground); gameArea.getChildren().add(gamePlayground);
         gameArea.getChildren().add(gamePopup);
@@ -88,26 +94,35 @@ public class Game extends Application {
         //游戏初始化
         setGameBackground();
         setGamePlayground(motaGame);
-        setGamePopup();
+        gamePopupInit();
         //键盘事件
         scene.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.W) { try { motaGame.move(this,new int[] {-1,0}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
-            if (e.getCode() == KeyCode.S) { try { motaGame.move(this,new int[] {1,0}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
-            if (e.getCode() == KeyCode.A) { try { motaGame.move(this,new int[] {0,-1}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
-            if (e.getCode() == KeyCode.D) { try { motaGame.move(this,new int[] {0,1}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
-            if (e.getCode() == KeyCode.Z) { try { gameSave(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
-            if (e.getCode() == KeyCode.X) { try { gameLoad(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
-            if (e.getCode() == KeyCode.R) { try { gameStart(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
-            if (e.getCode() == KeyCode.B) {
-                if (bgmVolume == 0) { bgmVolume = 1; mediaBGM.setVolume(bgmVolume);}
-                else {bgmVolume = 0; mediaBGM.setVolume(bgmVolume);}
+            if (gamePopup.isVisible()) {gamePopup.setVisible(false);}
+            else {
+                if (e.getCode() == KeyCode.W) { try { motaGame.move(this,new int[] {-1,0}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+                if (e.getCode() == KeyCode.S) { try { motaGame.move(this,new int[] {1,0}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+                if (e.getCode() == KeyCode.A) { try { motaGame.move(this,new int[] {0,-1}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+                if (e.getCode() == KeyCode.D) { try { motaGame.move(this,new int[] {0,1}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+                if (e.getCode() == KeyCode.Z) { try { gameSave(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+                if (e.getCode() == KeyCode.X) { try { gameLoad(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+                if (e.getCode() == KeyCode.R) { try { gameStart(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+                if (e.getCode() == KeyCode.B) {
+                    if (bgmVolume == 0) {
+                        bgmVolume = 0.4;
+                        mediaBGM.setVolume(bgmVolume);
+                    }
+                    else {
+                        bgmVolume = 0;
+                        mediaBGM.setVolume(bgmVolume);
+                    }
+                }
+                if (e.getCode() == KeyCode.G) {
+                    if (audioVolume == 0) audioVolume = 1;
+                    else audioVolume = 0;
+                }
+                if (e.getCode() == KeyCode.C) { try { gameUndo(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+                if (e.getCode() == KeyCode.V) { try { gameRedo(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
             }
-            if (e.getCode() == KeyCode.G) {
-                if (audioVolume == 0) audioVolume = 1;
-                else audioVolume = 0;
-            }
-            if (e.getCode() == KeyCode.C) { try { gameUndo(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
-            if (e.getCode() == KeyCode.V) { try { gameRedo(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
         });
         //按钮事件
 
@@ -118,20 +133,38 @@ public class Game extends Application {
     }
 
     //功能函数生成特定大小的ImageView
-    public ImageView getImageView(String path,int length){
-        Image image=new Image(path);
-        ImageView imageView=new ImageView(image);
+    public ImageView getImageView(String path,int length) {
+        Image image = new Image(path);
+        ImageView imageView = new ImageView(image);
         imageView.setFitWidth(length);
         imageView.setFitHeight(length);
         return imageView;
+    }
+
+    //功能函数生成像素字体
+    public Text getText(String string) {
+        Text text = new Text(string);
+        Font font;
+        font = Font.loadFont("C:/Users/AAA/IdeaProjects/Project_2/font/swfit.ttf",100);
+        text.setFont(font);
+        return text;
     }
 
     void showWindow() throws Exception {
         start(stage);
     }
 
-    //音频播放
-    public void musicBGMPlay(String paths) {
+    //设定弹出框
+    public void setGamePopup(Lattice lattice,String string) {
+        gamePopup.setVisible(true);
+        gamePopup.getChildren().clear();
+        gamePopup.getChildren().add(getImageView(lattice.getGraphic(),40));
+        gamePopup.getChildren().add(new Text(string));
+        //gamePopup.requestFocus();
+    }
+
+    //BGM播放
+    private void musicBGMPlay(String paths) {
         Media mediaSource = new Media(Paths.get(paths).toUri().toString());
         mediaBGM = new MediaPlayer(mediaSource);
         mediaBGM.setVolume(bgmVolume);
@@ -238,11 +271,14 @@ public class Game extends Application {
     }
 
     //弹出框初始化
-    private void setGamePopup(){
+    private void gamePopupInit() {
         gamePopup.setAlignment(Pos.CENTER);
         gamePopup.setStyle("-fx-background-color:rgba(239,221,173,0.8);");
         gamePopup.setVisible(false);
         gamePopup.setSpacing(40);
+        gamePopup.setMaxHeight(120);
+        gamePopup.setMaxWidth(624);
+        //gamePopup.setOnKeyPressed(event -> gamePopup.setVisible(false));
     }
 
     //按钮初始化
@@ -261,5 +297,12 @@ public class Game extends Application {
         btRestart.setPrefSize(width,height); btHelp.setPrefSize(width,height); btInfo.setPrefSize(width,height);
         btSave.setPrefSize(width,height); btLoad.setPrefSize(width,height);
         btUndo.setPrefSize(width,height); btRedo.setPrefSize(width,height);
+    }
+
+    //显示区初始化
+    private void statusInit() {
+        statusHpLv.getChildren().add(getImageView("file:pic/Status/血量.png",32));
+        statusHpLv.getChildren().add(getText("0/1000"));
+
     }
 }

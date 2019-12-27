@@ -7,7 +7,10 @@ import java.io.FileNotFoundException;
 
 public class DoorYellow extends Lattice {
     public void affectWith(Game game,Player player) throws FileNotFoundException {
-        if (player.getKeyYellowNum() == 0) { player.moveCancel();}//没钥匙不能动
+        if (player.getKeyYellowNum() == 0) {
+            player.moveCancel();
+            game.setGamePopup(this,"没有黄钥匙了！");
+        }
         else {player.changeKeyYellowNum(-1);}
         game.musicAudioPlay(getAudio());
         game.gameSaveForUndo();
