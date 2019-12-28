@@ -12,6 +12,7 @@ public class GemDef extends Lattice {
         game.musicAudioPlay(getAudio());
         game.gameSaveForUndo();
         game.setGamePopup(this,"捡到防御宝石,防御+2");
+        Game.addDisplayText("捡到防御宝石，防御+2");
     }
 
     public String getCode() {return "n";}

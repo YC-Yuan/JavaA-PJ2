@@ -11,6 +11,7 @@ public class KeyRed extends Lattice {
         player.changeKeyRedNum(1);
         game.musicAudioPlay(getAudio());
         game.gameSaveForUndo();
+        Game.addDisplayText("捡到红钥匙，隐约听到了锁孔的低吼");
     }
 
     public String getCode() {return "v";}

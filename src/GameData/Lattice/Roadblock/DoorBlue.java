@@ -11,10 +11,12 @@ public class DoorBlue extends Lattice {
         if (player.getKeyBlueNum() == 0) {
             player.moveCancel();
             game.setGamePopup(this,"没有蓝钥匙了！");
+            Game.addDisplayText("没有蓝钥匙，开不了门");
         }
         else {player.changeKeyBlueNum(-1);}
         game.musicAudioPlay(getAudio());
         game.gameSaveForUndo();
+        Game.addDisplayText("打开了蓝门");
     }
 
     public String getCode() {return "u";}

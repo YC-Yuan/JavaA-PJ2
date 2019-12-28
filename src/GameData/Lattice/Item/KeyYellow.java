@@ -11,6 +11,7 @@ public class KeyYellow extends Lattice {
         player.changeKeyYellowNum(1);
         game.musicAudioPlay(getAudio());
         game.gameSaveForUndo();
+        Game.addDisplayText("捡到金光灿灿的黄钥匙");
     }
 
     public String getCode() {return "r";}

@@ -12,6 +12,7 @@ public class VialHealthM extends Lattice {
         game.musicAudioPlay(getAudio());
         game.gameSaveForUndo();
         game.setGamePopup(this,"捡到中血瓶，恢复100生命");
+        Game.addDisplayText("喝下中血瓶，血气方刚！");
     }
 
     public String getCode() {return "p";}

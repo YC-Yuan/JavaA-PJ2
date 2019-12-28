@@ -9,6 +9,7 @@ public class Wall extends Lattice {
         player.moveCancel();
         game.musicAudioPlay(getAudio());
         game.setGamePopup(this,"撞墙了！");
+        Game.addDisplayText("撞墙了！");
     }
 
     public String getCode() {return "b";}

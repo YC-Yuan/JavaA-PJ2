@@ -10,10 +10,12 @@ public class DoorRed extends Lattice {
         if (player.getKeyRedNum() == 0) {
             player.moveCancel();
             game.setGamePopup(this,"没有红钥匙了！");
+            Game.addDisplayText("没有红钥匙，开不了门");
         }
         else {player.changeKeyRedNum(-1);}
         game.musicAudioPlay(getAudio());
         game.gameSaveForUndo();
+        Game.addDisplayText("红门发出享受的声音，允许你通过");
     }
 
     public String getCode() {return "w";}

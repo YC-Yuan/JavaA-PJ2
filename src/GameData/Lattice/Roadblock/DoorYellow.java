@@ -10,10 +10,12 @@ public class DoorYellow extends Lattice {
         if (player.getKeyYellowNum() == 0) {
             player.moveCancel();
             game.setGamePopup(this,"没有黄钥匙了！");
+            Game.addDisplayText("没有黄钥匙，开不了门");
         }
         else {player.changeKeyYellowNum(-1);}
         game.musicAudioPlay(getAudio());
         game.gameSaveForUndo();
+        Game.addDisplayText("黄门开了，快走吧~");
     }
 
     public String getCode() {return "s";}

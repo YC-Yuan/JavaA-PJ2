@@ -34,7 +34,6 @@ public class Game extends Application {
     private MotaGame motaGame = Map.mapLoad("redo",turn);
     private Player player = motaGame.getPlayer();
     Game() throws FileNotFoundException {}
-
     //GUI设定
     private final static int LENGTH = 48;
     private final static int PADDLE = 20;
@@ -64,8 +63,8 @@ public class Game extends Application {
     private double bgmVolume = 0.4, audioVolume = 1;
     //怪物手册声明
     private GridPane monsterInfo = new GridPane();
-
     //老兵与商人界面声明
+
     @Override
     public void start(Stage stage) {
         //大构架声明与组件
@@ -108,16 +107,22 @@ public class Game extends Application {
             if (e.getCode() == KeyCode.S) { try { motaGame.move(this,new int[] {1,0}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
             if (e.getCode() == KeyCode.A) { try { motaGame.move(this,new int[] {0,-1}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
             if (e.getCode() == KeyCode.D) { try { motaGame.move(this,new int[] {0,1}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+
             if (e.getCode() == KeyCode.Z) { try { gameSave(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
             if (e.getCode() == KeyCode.X) { try { gameLoad(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
             if (e.getCode() == KeyCode.R) { try { gameRestart(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
-            if (e.getCode() == KeyCode.B) { useBtBGM();}
-            if (e.getCode() == KeyCode.G) {
-                if (audioVolume == 0) audioVolume = 1;
-                else audioVolume = 0;
-            }
+            if (e.getCode() == KeyCode.B) { useBtBGM(); }
+            if (e.getCode() == KeyCode.G) { useBtAudio(); }
             if (e.getCode() == KeyCode.C) { try { gameUndo(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
             if (e.getCode() == KeyCode.V) { try { gameRedo(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+            if (e.getCode() == KeyCode.H) {
+                if (!gamePopup.isVisible()) useBtHelp();
+                else gamePopup.setVisible(false);
+            }
+            if (e.getCode() == KeyCode.F) {
+                if (!monsterInfo.isVisible()) try { monsterInfo(motaGame); } catch (CloneNotSupportedException ex) { ex.printStackTrace(); }
+                else monsterInfo.setVisible(false);
+            }
         });
         //按钮事件
         btBgm.setOnAction(event -> {useBtBGM();});
@@ -127,21 +132,23 @@ public class Game extends Application {
         btSave.setOnAction(event -> { try { gameSave(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } });
         btLoad.setOnAction(event -> { try { gameLoad(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } });
         btRestart.setOnAction(event -> { try { gameRestart(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } });
-        btHelp.setOnAction(event -> {});
-        btInfo.setOnAction(event -> { try { monsterInfo(motaGame); } catch (CloneNotSupportedException e) { e.printStackTrace(); } });
+        btHelp.setOnAction(event -> {
+            if (gamePopup.isVisible()) gamePopup.setVisible(false);
+            else useBtHelp();
+        });
+        btInfo.setOnAction(event -> { try { monsterInfo(motaGame); } catch (CloneNotSupportedException ex) { ex.printStackTrace(); } });
 
         stage.setResizable(false);//窗口不能伸缩
         stage.setTitle("Java魔塔");//设定窗口名称
         stage.setScene(scene);
         stage.show();
     }
-
     //使用怪物手册
     private void monsterInfo(MotaGame motaGame) throws CloneNotSupportedException {
         final int LENGTH = 32;
         monsterInfo.setVisible(true);
-        monsterInfo.requestFocus();
         monsterInfo.getChildren().clear();
+        monsterInfo.requestFocus();
         Player player = motaGame.getPlayer();
         Player[] players = new Player[9];
         for (int i = 0; i < players.length; i++) {
@@ -261,6 +268,16 @@ public class Game extends Application {
             for (int i = 1; i < 9; i++) monsterInfo.add(gettext(tempString[i]),i,row);
         }
     }
+    //更新弹出框
+    public void setGamePopup(Lattice lattice,String string) {
+        gamePopup.setVisible(true);
+        gamePopup.requestFocus();
+        gamePopup.getChildren().clear();
+        gamePopup.getChildren().add(getImageView(lattice.getGraphic(),40));
+        Text text = new Text(string);
+        text.setFont(Font.loadFont("file:resources/fonts/Zfull-GB.ttf",20));
+        gamePopup.getChildren().add(text);
+    }
     //将字符串添加到右下日志区的text中
     public static void addDisplayText(String add) {
         text.add(add + "\n");
@@ -295,16 +312,6 @@ public class Game extends Application {
     void showWindow() {
         start(stage);
     }
-    //更新弹出框
-    public void setGamePopup(Lattice lattice,String string) {
-        gamePopup.setVisible(true);
-        gamePopup.getChildren().clear();
-        gamePopup.getChildren().add(getImageView(lattice.getGraphic(),40));
-        Text text = new Text(string);
-        text.setFont(Font.loadFont("file:resources/fonts/Zfull-GB.ttf",20));
-        gamePopup.getChildren().add(text);
-        gamePopup.requestFocus();
-    }
     //BGM播放
     private void musicBGMPlay(String paths) {
         Media mediaSource = new Media(Paths.get(paths).toUri().toString());
@@ -320,7 +327,7 @@ public class Game extends Application {
         mediaAudio.setVolume(audioVolume);
         mediaAudio.setAutoPlay(true);
     }
-    //按钮功能打包
+    //音乐按钮功能打包
     private void useBtBGM() {
         if (bgmVolume == 0) {
             bgmVolume = 0.4;
@@ -334,6 +341,33 @@ public class Game extends Application {
     private void useBtAudio() {
         if (audioVolume == 0) audioVolume = 1;
         else audioVolume = 0;
+    }
+    //帮助手册按钮功能
+    private void useBtHelp() {
+        gamePopup.setVisible(true);
+        gamePopup.requestFocus();
+        gamePopup.getChildren().clear();
+        String help = "\n\n\n欢迎来到魔塔游戏:D\n" +
+                "这是一款地下城冒险游戏,在魔塔中随意探索、提升自我,击败魔王!\n" +
+                "操作方式:\n" +
+                "按下wsad对应上下左右\n" +
+                "点击按钮或按下对应键位触发按钮功能\n" +
+                "怪物手册可以查看当前楼层怪物的属性并模拟战斗损失\n" +
+                "战斗方式:\n" +
+                "战斗为回合制，勇者与怪物互相攻击直到一方死亡\n" +
+                "一轮中受到的伤害为对方攻击力减去己方防御力（防御大于攻击则不造成伤害）\n" +
+                "每个种族的怪物有各自特性，使用怪物手册可以查看\n" +
+                "地图物品说明:\n" +
+                "不同颜色的血瓶可以恢复相应生命值\n" +
+                "不同颜色的宝石可以增加对应属性值\n" +
+                "门需要用对应颜色的钥匙才能打开\n" +
+                "商人处可以花钱买东西，老人则可以对经验丰富的勇者作出指导\n" +
+                "获胜方式:\n" +
+                "拾取第五层的最终宝物即可获胜\n\n\n";
+        Text text=new Text(help);
+        text.setFont(Font.loadFont("file:resources/fonts/Zfull-GB.ttf",18));
+        gamePopup.getChildren().add(text);
+        gamePopup.requestFocus();
     }
     //生成叠底用GridPane
     private void setGameBackground() {
@@ -391,11 +425,11 @@ public class Game extends Application {
                                 displayString = "";
                                 if (addTimes >= LINES) {//displayString的增加次数超过line限制
                                     for (int j = 0; j < LINES; j++) {//循环Line次
-                                        displayString += text.get(text.size() - (LINES - j) - (changeNum - i) + 3);
+                                        displayString += text.get(text.size() - (LINES - j) - (changeNum - i) + 1);
                                     }
                                 }
                                 else {//display只会加Line次以下
-                                    for (int j = 0; j < addTimes; j++) {//循环text行数次
+                                    for (int j = 0; j <= addTimes; j++) {//循环text行数次
                                         displayString += text.get(j);
                                     }
                                 }
@@ -460,7 +494,7 @@ public class Game extends Application {
         monsterInfo.setVgap(20);
         monsterInfo.setMaxHeight(400);
         monsterInfo.setMaxWidth(624);
-        monsterInfo.setOnKeyPressed(event -> monsterInfo.setVisible(false));
+        monsterInfo.setOnKeyPressed(event -> {if (event.getCode() != KeyCode.F) monsterInfo.setVisible(false);});
     }
     //弹出框初始化
     private void gamePopupInit() {
@@ -469,8 +503,8 @@ public class Game extends Application {
         gamePopup.setVisible(false);
         gamePopup.setSpacing(40);
         gamePopup.setMaxHeight(120);
+        gamePopup.setOnKeyPressed(event -> {if (event.getCode() != KeyCode.H) gamePopup.setVisible(false);});
         gamePopup.setMaxWidth(624);
-        gamePopup.setOnKeyPressed(event -> gamePopup.setVisible(false));
     }
     //按钮初始化
     private void buttonsInit() {
