@@ -7,18 +7,20 @@ import GameData.Lattice.Player;
 public class Monster extends Lattice {
     int hp, atk, def, mon, exp;
     String name;
+    boolean isBeaten=false;
 
     //构造函数
     Monster() {}
 
     void fightEnd(Player player) {
-        if (player.getHealth() == 0) {//生命不足，游戏结束
-            //游戏结束的代码
+        if (player.getHealth() == 0) {
+            this.isBeaten=false;
         }
         else {
             //击败怪物
             player.changeMoney(mon);
             player.changeExperience(exp);
+            this.isBeaten=true;
         }
     }
 

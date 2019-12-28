@@ -2,6 +2,7 @@ package GameData.Lattice.Monster;
 
 import GUI.Game;
 import GameData.Lattice.Player;
+import javafx.application.Platform;
 
 import java.io.FileNotFoundException;
 
@@ -18,7 +19,12 @@ public class Slime extends Monster {
         fightWith(player);
         game.musicAudioPlay(getAudio());
         game.gameSaveForUndo();
-        game.setGamePopup(this,name + "被打败了！");
+        if (isBeaten) game.setGamePopup(this,name + "被打败了！");
+        else {
+            game.musicAudioPlay("audio/被砍中.mp3");
+            game.setGamePopup(this,"勇者的眼神已黯淡无光……对他好一点……\n胜败乃兵家常事，大侠请重新来过");
+            game.gameRestart();
+        }
     }
 
     private void fightWith(Player player) {

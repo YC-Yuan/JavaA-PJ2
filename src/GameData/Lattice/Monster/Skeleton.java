@@ -22,7 +22,12 @@ public class Skeleton extends Monster {
         fightWith(player);
         game.musicAudioPlay(getAudio());
         game.gameSaveForUndo();
-        game.setGamePopup(this,name+"被打败了！");
+        if (isBeaten) game.setGamePopup(this,name + "被打败了！");
+        else {
+            game.musicAudioPlay("audio/被砍中.mp3");
+            game.setGamePopup(this,"胜败乃兵家常事，大侠请重新来过");
+            game.gameRestart();
+        }
     }
 
     private void fightWith(Player player) {

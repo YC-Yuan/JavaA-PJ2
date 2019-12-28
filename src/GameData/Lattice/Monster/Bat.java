@@ -18,29 +18,34 @@ public class Bat extends Monster {
         fightWith(player);
         game.musicAudioPlay(getAudio());
         game.gameSaveForUndo();
-        game.setGamePopup(this,name+"被打败了！");
+        if (isBeaten) game.setGamePopup(this,name + "被打败了！");
+        else {
+            game.musicAudioPlay("audio/被砍中.mp3");
+            game.setGamePopup(this,"胜败乃兵家常事，大侠请重新来过");
+            game.gameRestart();
+        }
     }
 
     private void fightWith(Player player) {
         boolean isPoisoned = false;
         while (hp > 0 & player.getHealth() > 0) {
             if (isPoisoned) {
-                //("勇者中毒，受到百分比伤害" + (int) Math.ceil(player.getHealthPoint() * poisonRate) + "点！");
+                Game.addDisplayText("勇者中毒，受到百分比伤害" + (int) Math.ceil(player.getHealth() * poisonRate) + "点！");
                 rateDamageSum += (int) Math.ceil(player.getHealth() * poisonRate);
                 player.changeHealth(-(int) Math.ceil(player.getHealth() * poisonRate));
             }
             //勇者攻击怪物
             hp = Math.max(0,hp - Math.max(0,player.getAttack() - def));
-            //("勇者对" + name + "造成" + Math.max(0,player.getAttackPoint() - def) + "点伤害！" +name + "还剩" + hp + "点生命值");
+            Game.addDisplayText("勇者对" + name + "造成" + Math.max(0,player.getAttack() - def) + "点伤害！" +name + "还剩" + hp + "点生命值");
             //怪物攻击勇者
             player.changeHealth(-Math.max(0,atk - player.getDefence() + poisonDamage));
-            //(name + "对勇者造成" + Math.max(0,atk - player.getDefencePoint() + poisonDamage) + "点伤害！" + "勇者还剩" + player.getHealthPoint() + "点生命值");
+            Game.addDisplayText(name + "对勇者造成" + Math.max(0,atk - player.getDefence() + poisonDamage) + "点伤害！" + "勇者还剩" + player.getHealth() + "点生命值");
             poisonDamageSum += poisonDamage;
             //进入中毒状态并提示
             if (!isPoisoned) {
                 isPoisoned = true; //(name + "的攻击使勇者中毒，每回合都受到额外伤害");}
             }
-            //(name + "共造成了" + rateDamageSum + "点百分比毒伤" + poisonDamageSum + "点毒素额外伤害");
+            Game.addDisplayText(name + "共造成了" + rateDamageSum + "点百分比毒伤" + poisonDamageSum + "点毒素额外伤害");
             fightEnd(player);
         }
     }

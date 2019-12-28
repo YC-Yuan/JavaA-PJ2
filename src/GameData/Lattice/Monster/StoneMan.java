@@ -12,22 +12,27 @@ public class StoneMan extends Monster {
         fightWith(player);
         game.musicAudioPlay(getAudio());
         game.gameSaveForUndo();
-        game.setGamePopup(this,name+"被打败了！");
+        if (isBeaten) game.setGamePopup(this,name + "被打败了！");
+        else {
+            game.musicAudioPlay("audio/被砍中.mp3");
+            game.setGamePopup(this,"胜败乃兵家常事，大侠请重新来过");
+            game.gameRestart();
+        }
     }
 
     private void fightWith(Player player) {
         while (hp > 0 & player.getHealth() > 0) {
             //勇者攻击怪物
             hp = Math.max(0,hp - Math.max(0,player.getAttack() - def));
-            //("勇者对" + name + "造成" + Math.max(0,player.getAttackPoint() - def) + "点伤害！" +name + "还剩" + hp + "点生命值");
+            Game.addDisplayText("勇者对" + name + "造成" + Math.max(0,player.getAttack() - def) + "点伤害！" +name + "还剩" + hp + "点生命值");
             //石头人受到攻击，攻击防御+2
             atk += 2; def += 2;
-            //("石头人受到攻击，攻击防御+2，攻击力为" + atk + "，防御力为" + def);
+            Game.addDisplayText("石头人受到攻击，攻击防御+2，攻击力为" + atk + "，防御力为" + def);
             //怪物攻击勇者
             player.changeHealth(-Math.max(0,atk - player.getDefence()));
-            //(name + "对勇者造成" + Math.max(0,atk - player.getDefencePoint()) + "点伤害！" +"勇者还剩" + player.getHealthPoint() + "点生命值");
+            Game.addDisplayText(name + "对勇者造成" + Math.max(0,atk - player.getDefence()) + "点伤害！" +"勇者还剩" + player.getHealth() + "点生命值");
         }
-        //(name + "的最终攻击力为:" + atk + "，防御力为:" + def);
+        Game.addDisplayText(name + "的最终攻击力为:" + atk + "，防御力为:" + def);
         fightEnd(player);
 
     }

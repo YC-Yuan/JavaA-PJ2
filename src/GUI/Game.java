@@ -7,6 +7,8 @@ import GameData.Lattice.Player;
 import GameData.Map;
 import GameData.MotaGame;
 import javafx.application.Application;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -28,6 +30,7 @@ import java.util.ArrayList;
 public class Game extends Application {
     //游戏初始化
     private int turn = 0, maxTurn = 0;
+    private static int addNum = 0, addTimes = 0;
     private MotaGame motaGame = Map.mapLoad("redo",turn);
     private Player player = motaGame.getPlayer();
     Game() throws FileNotFoundException {}
@@ -64,7 +67,7 @@ public class Game extends Application {
 
     //老兵与商人界面声明
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         //大构架声明与组件
         HBox hbox = new HBox();
         hbox.getChildren().add(gameArea); hbox.getChildren().add(panel);
@@ -107,7 +110,7 @@ public class Game extends Application {
             if (e.getCode() == KeyCode.D) { try { motaGame.move(this,new int[] {0,1}); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
             if (e.getCode() == KeyCode.Z) { try { gameSave(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
             if (e.getCode() == KeyCode.X) { try { gameLoad(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
-            if (e.getCode() == KeyCode.R) { try { gameLoad(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
+            if (e.getCode() == KeyCode.R) { try { gameRestart(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } }
             if (e.getCode() == KeyCode.B) { useBtBGM();}
             if (e.getCode() == KeyCode.G) {
                 if (audioVolume == 0) audioVolume = 1;
@@ -123,7 +126,7 @@ public class Game extends Application {
         btRedo.setOnAction(event -> { try { gameRedo(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } });
         btSave.setOnAction(event -> { try { gameSave(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } });
         btLoad.setOnAction(event -> { try { gameLoad(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } });
-        btRestart.setOnAction(event -> { try { gameLoad(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } });
+        btRestart.setOnAction(event -> { try { gameRestart(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } });
         btHelp.setOnAction(event -> {});
         btInfo.setOnAction(event -> { try { monsterInfo(motaGame); } catch (CloneNotSupportedException e) { e.printStackTrace(); } });
 
@@ -134,7 +137,6 @@ public class Game extends Application {
     }
 
     //使用怪物手册
-    //怪物手册
     private void monsterInfo(MotaGame motaGame) throws CloneNotSupportedException {
         final int LENGTH = 32;
         monsterInfo.setVisible(true);
@@ -262,8 +264,7 @@ public class Game extends Application {
     //将字符串添加到右下日志区的text中
     public static void addDisplayText(String add) {
         text.add(add + "\n");
-        updateDisplay();
-        displayText.setText(displayString);
+        addNum++;
     }
     //功能函数生成特定大小的ImageView
     private ImageView getImageView(String path,int length) {
@@ -285,13 +286,13 @@ public class Game extends Application {
         text.setFont(Font.loadFont("file:resources/fonts/swfit.ttf",20));
         return text;
     }
-    private Text gettext(String string){
+    private Text gettext(String string) {
         Text text = new Text(string);
-        text.setFont(Font.loadFont("file:resources/fonts/Zfull-GB.ttf",20));
+        text.setFont(Font.loadFont("file:resources/fonts/Zfull-GB.ttf",12));
         return text;
     }
     //从开始界面弹出本窗口
-    void showWindow() throws Exception {
+    void showWindow() {
         start(stage);
     }
     //更新弹出框
@@ -302,6 +303,7 @@ public class Game extends Application {
         Text text = new Text(string);
         text.setFont(Font.loadFont("file:resources/fonts/Zfull-GB.ttf",20));
         gamePopup.getChildren().add(text);
+        gamePopup.requestFocus();
     }
     //BGM播放
     private void musicBGMPlay(String paths) {
@@ -374,10 +376,40 @@ public class Game extends Application {
             }
         }
     }
-    //启动游戏
-    private void gameStart() throws FileNotFoundException {
-        motaGame = Map.mapLoad("redo",turn);
-        setGamePlayground(motaGame);
+    //日志区动态刷新
+    public void updateDisplay() {
+        int changeNum = addNum;
+        addNum = 0;
+        if (changeNum > 0) {
+            Service<String> service = new Service<String>() {
+                @Override
+                protected Task<String> createTask() {
+                    return new Task<String>() {
+                        @Override
+                        protected String call() {
+                            for (int i = 0; i < changeNum; i++) {
+                                displayString = "";
+                                if (addTimes >= LINES) {//displayString的增加次数超过line限制
+                                    for (int j = 0; j < LINES; j++) {//循环Line次
+                                        displayString += text.get(text.size() - (LINES - j) - (changeNum - i) + 3);
+                                    }
+                                }
+                                else {//display只会加Line次以下
+                                    for (int j = 0; j < addTimes; j++) {//循环text行数次
+                                        displayString += text.get(j);
+                                    }
+                                }
+                                updateMessage(displayString);
+                                addTimes++;
+                                try { Thread.sleep(120); } catch (InterruptedException e) { e.printStackTrace(); }
+                            }
+                            return null;
+                        }
+                    };
+                }
+            };
+            displayText.textProperty().bind(service.messageProperty()); service.restart();
+        }
     }
     //游戏存档
     private void gameSave() throws FileNotFoundException {
@@ -404,6 +436,11 @@ public class Game extends Application {
             setGamePlayground(motaGame);
         }//防止过度重做
     }
+    //重启
+    public void gameRestart() throws FileNotFoundException {
+        motaGame = Map.mapLoad("redo",0);
+        setGamePlayground(motaGame);
+    }
     //每轮为重做存档
     public void gameSaveForUndo() throws FileNotFoundException {
         updateTurn();
@@ -413,17 +450,6 @@ public class Game extends Application {
     private void updateTurn() {
         turn++;
         maxTurn = Math.max(turn,maxTurn);
-    }
-    //被动功能函数，更新打入右下日志区的string
-    private static void updateDisplay() {
-        displayString = "\n";
-        if (text.size() <= LINES) {
-            for (String s : text) { displayString += s; }
-            for (int i = 0; i <= LINES - text.size(); i++) { displayString += "\n"; }
-        }
-        if (text.size() > LINES) {
-            for (int i = LINES; i >= 0; i--) { displayString += text.get(text.size() - i - 1); }
-        }
     }
     //怪物手册初始化
     private void monsterInfoInit() {
@@ -444,6 +470,7 @@ public class Game extends Application {
         gamePopup.setSpacing(40);
         gamePopup.setMaxHeight(120);
         gamePopup.setMaxWidth(624);
+        gamePopup.setOnKeyPressed(event -> gamePopup.setVisible(false));
     }
     //按钮初始化
     private void buttonsInit() {
@@ -470,9 +497,9 @@ public class Game extends Application {
         statusLv.getChildren().add(getImageView("file:pic/Status/等级.png",LENGTH));
         statusLv.getChildren().add(getText(player.getLevel()));
         statusLv.getChildren().add(getImageView("file:pic/Status/经验.png",LENGTH));
-        statusLv.getChildren().add(gettext(player.getExperience() + "/" + player.getExpNeed()));
+        statusLv.getChildren().add(getText(player.getExperience() + "/" + player.getExpNeed()));
         statusAbility.getChildren().add(getImageView("file:pic/Status/血量.png",LENGTH));
-        statusAbility.getChildren().add(gettext(player.getHealth() + "/" + player.getHealthMax()));
+        statusAbility.getChildren().add(getText(player.getHealth() + "/" + player.getHealthMax()));
         statusAbility.getChildren().add(getImageView("file:pic/Status/攻击.png",LENGTH));
         statusAbility.getChildren().add(getText(player.getAttack()));
         statusAbility.getChildren().add(getImageView("file:pic/Status/防御.png",LENGTH));
@@ -499,7 +526,7 @@ public class Game extends Application {
         status.setPadding(INSETS);
         //display
         display.setTranslateX(20);
-        display.setTranslateY(-20);
+        display.setTranslateY(5);
         displayText.setFont(Font.font("file:resources/fonts/Zfull-GB.ttf",20));
     }
 }
