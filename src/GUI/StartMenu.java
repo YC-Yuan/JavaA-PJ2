@@ -16,7 +16,6 @@ public class StartMenu extends Application {
     public void start(Stage primaryStage) {
         VBox vBox = new VBox();
         vBox.setPrefSize(1280,720);
-        //vBox.getStylesheets().add("GUI/startMenu.css");
 
         Text title = new Text("Mota 魔塔");
         title.setId("title");
@@ -46,12 +45,9 @@ public class StartMenu extends Application {
         mediaBGM.setCycleCount(5);
 
         //按钮事件绑定
-        start.setOnAction(event -> {
-            try {
-                Game game = new Game(); game.showWindow(); primaryStage.close(); mediaBGM.stop();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+        start.setOnAction(event -> { try { Game game = new Game(); game.showWindow(); primaryStage.close(); mediaBGM.stop(); } catch (Exception ex) { ex.printStackTrace(); } });
+        load.setOnAction(event -> {
+            try {Game game = new Game(); game.showWindow(); game.gameLoad(); primaryStage.close(); mediaBGM.stop();} catch (Exception ex) {ex.printStackTrace();}
         });
         exit.setOnAction(event -> primaryStage.close());
     }

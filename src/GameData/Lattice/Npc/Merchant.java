@@ -90,15 +90,15 @@ public class Merchant extends Lattice {
     }
 
     public String getGood_4(int num) {
-        price_4 = (int) (Math.random() * 30);
-        String[] info = {"金钱赌博","50%翻倍50%赔光\n搏一搏,单车变摩托\n买一买,别墅能靠海",String.valueOf(price_4)};
+        price_4 = (int) (Math.random() * 29+1);
+        String[] info = {"金钱赌博","50%赚一倍50%赔光\n搏一搏,单车变摩托\n买一买,别墅能靠海",String.valueOf(price_4)};
         return info[num];
     }
 
     public void buyGood_4(Game game,Player player) {
         if (player.getMoney() >= price_4) {
             if ((int) (Math.random() * 100) < 50) {
-                player.changeMoney(price_4 * 2);
+                player.changeMoney(price_4);
                 Game.addDisplayText("运气不错！勇士心情大好,还想试试");
             }
             else {

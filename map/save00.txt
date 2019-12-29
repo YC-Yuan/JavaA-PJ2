@@ -1,17 +1,17 @@
 bbbbbbbbbbbbb
 blabbbibbbakb
-bbaFebabhzabb
-bbbefbabghbbb
-bbbbdbabgbbbb
-bbbbcaaagbbbb
+bbaaababaaabb
+bbbaababaabbb
+bbbbabababbbb
+bbbbaaaaabbbb
 bbbbbaaabbbbb
 bbbbbbabbbbbb
 bbbbbbabbbbbb
 bbbbbbabbbbbb
 bbbbbbabbbbbb
 bbbbbbbbbbbbb
-bbbbbbbbbbbbb
-1 9 10
-1 90
-355 1000 14 16 9
-3 0 0
+bbcdefFghxzbb
+1 1 6
+1 10
+860 1000 10 10 1
+0 0 0

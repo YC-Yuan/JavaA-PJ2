@@ -1,17 +1,17 @@
 bbbbbbbbbbbbb
-bmbasajaaaaab
-bobcbaaabaaab
-badadaaasaaab
-bbbmbbbbbbabb
+bmbasajadaanb
+bobcbrarbaoab
+badadarasaamb
+bbbmbbbbbbcbb
 bndasasaacabb
-bbbobbbgbbabb
+bbbobbbgbbobb
 bmbauaiasdabb
-bafabbbgbbabb
-bnbdbbaaaaaab
-bsbaabalbbaab
-bpbatbaaauabb
+bafabbbgbbdbb
+bnbdbbaaafaab
+bsbaabmlbbnpb
+bpbatbnpauabb
 bbbbbbbbbbbbb
-1 9 10
-1 90
-355 1000 14 16 9
-3 0 0
+1 1 6
+1 10
+860 1000 10 10 1
+0 0 0

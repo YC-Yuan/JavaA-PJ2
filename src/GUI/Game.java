@@ -132,6 +132,10 @@ public class Game extends Application {
                 else monsterInfo.setVisible(false);
             }
         });
+        //鼠标点击控制人物移动
+        gameArea.setOnMouseClicked(e -> {
+            moveWhenClicked(getClickedPosition((int) e.getX(),(int) e.getY()));
+        });
         //按钮事件
         btBgm.setOnAction(event -> {useBtBGM();});
         btAudio.setOnAction(event -> {useBtAudio();});
@@ -394,7 +398,7 @@ public class Game extends Application {
                 "战斗方式:\n" +
                 "战斗为回合制，勇者与怪物互相攻击直到一方死亡\n" +
                 "一轮中受到的伤害为对方攻击力减去己方防御力（防御大于攻击则不造成伤害）\n" +
-                "每个种族的怪物有各自特性，使用怪物手册可以查看\n" +
+                "每个种族的怪物有各自特性,使用怪物手册可以查看,一楼可以方便地查看所有怪物\n" +
                 "地图物品说明:\n" +
                 "不同颜色的血瓶可以恢复相应生命值\n" +
                 "不同颜色的宝石可以增加对应属性值\n" +
@@ -406,6 +410,21 @@ public class Game extends Application {
         text.setFont(Font.loadFont("file:resources/fonts/Zfull-GB.ttf",18));
         gamePopup.getChildren().add(text);
         gamePopup.requestFocus();
+    }
+    //用于实现鼠标点击移动
+    private int[] getClickedPosition(int X,int Y) {
+        return new int[] {(Y - 20) / 48,(X - 20) / 48};
+    }
+    private void moveWhenClicked(int[] clicked) {
+        int[] position = player.getPosition().clone();
+        if (clicked[0] == position[0] - 1 & clicked[1] == position[1] ||
+                clicked[0] == position[0] + 1 & clicked[1] == position[1] ||
+                clicked[0] == position[0] & clicked[1] == position[1] - 1 ||
+                clicked[0] == position[0] & clicked[1] == position[1] + 1) {
+            try { motaGame.move(this,new int[] {clicked[0] - player.getPosition()[0],clicked[1] - player.getPosition()[1]}); } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
     //生成叠底用GridPane
     private void setGameBackground() {
@@ -489,9 +508,9 @@ public class Game extends Application {
         updateStatus(player);
     }
     //游戏读档
-    private void gameLoad() throws FileNotFoundException {
+    void gameLoad() throws FileNotFoundException {
         motaGame = Map.mapLoad("save",0);
-        player=motaGame.getPlayer();
+        player = motaGame.getPlayer();
         setGamePlayground(motaGame);
         updateStatus(player);
     }
@@ -500,7 +519,7 @@ public class Game extends Application {
         if (turn > 0) {
             turn--;
             motaGame = Map.mapLoad("redo",turn);
-            player=motaGame.getPlayer();
+            player = motaGame.getPlayer();
             setGamePlayground(motaGame);
             updateStatus(player);
         }//防止过度撤销
@@ -510,7 +529,7 @@ public class Game extends Application {
         if (turn < maxTurn) {
             turn++;
             motaGame = Map.mapLoad("redo",turn);
-            player=motaGame.getPlayer();
+            player = motaGame.getPlayer();
             setGamePlayground(motaGame);
             updateStatus(player);
         }//防止过度重做
@@ -519,7 +538,7 @@ public class Game extends Application {
     public void gameRestart() throws FileNotFoundException {
         motaGame = Map.mapLoad("redo",0);
         setGamePlayground(motaGame);
-        player=motaGame.getPlayer();
+        player = motaGame.getPlayer();
         updateStatus(player);
     }
     //每轮为重做存档
@@ -535,7 +554,7 @@ public class Game extends Application {
     //怪物手册初始化
     private void monsterInfoInit() {
         monsterInfo.setAlignment(Pos.CENTER);
-        monsterInfo.setStyle("-fx-background-color:rgba(239,221,173,0.8);");
+        monsterInfo.setStyle("-fx-background-color:rgba(255,255,255,0.7);");
         monsterInfo.setVisible(false);
         monsterInfo.setHgap(20);
         monsterInfo.setVgap(20);
@@ -546,7 +565,7 @@ public class Game extends Application {
     //弹出框初始化
     private void gamePopupInit() {
         gamePopup.setAlignment(Pos.CENTER);
-        gamePopup.setStyle("-fx-background-color:rgba(239,221,173,0.8);");
+        gamePopup.setStyle("-fx-background-color:rgba(137,180,239,0.7);");
         gamePopup.setVisible(false);
         gamePopup.setSpacing(40);
         gamePopup.setMaxHeight(120);
@@ -557,7 +576,7 @@ public class Game extends Application {
     private void merchantInit() {
         int buttonWidth = 80, buttonHeight = 30;
         merchant.setAlignment(Pos.CENTER);
-        merchant.setStyle("-fx-background-color:rgba(239,221,173,0.8);");
+        merchant.setStyle("-fx-background-color:rgba(255,255,255,0.65);");
         merchant.setVisible(false);
         merchant.setHgap(20); merchant.setVgap(20);
         merchant.setMaxSize(624,400);
@@ -617,7 +636,7 @@ public class Game extends Application {
     private void panelInit() {
         final int LENGTH = 32, width = 596, height = 624;
         //panel
-        panel.setStyle("-fx-background-color:rgba(239,221,173,0.8);");
+        panel.setStyle("-fx-background-color:rgba(228,255,193,0.7);");
         panel.setMaxSize(width,height);
         panel.setMinSize(width,height);
         panel.setTranslateX(5);
