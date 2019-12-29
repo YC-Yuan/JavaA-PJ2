@@ -3,6 +3,7 @@ package GUI;
 import GameData.Lattice.Lattice;
 import GameData.Lattice.Monster.Monster;
 import GameData.Lattice.Monster.*;
+import GameData.Lattice.Npc.Merchant;
 import GameData.Lattice.Player;
 import GameData.Map;
 import GameData.MotaGame;
@@ -63,7 +64,12 @@ public class Game extends Application {
     private double bgmVolume = 0.4, audioVolume = 1;
     //怪物手册声明
     private GridPane monsterInfo = new GridPane();
-    //老兵与商人界面声明
+    //商人界面声明
+    private GridPane merchant = new GridPane();
+    private Button choose_1 = new Button("购买");
+    private Button choose_2 = new Button("购买");
+    private Button choose_3 = new Button("抽个奖");
+    private Button choose_4 = new Button("买它!!");
 
     @Override
     public void start(Stage stage) {
@@ -92,6 +98,8 @@ public class Game extends Application {
         buttons.setAlignment(Pos.BOTTOM_CENTER); buttonsInit();
         //音乐初始化
         musicBGMPlay("audio/背景音乐.mp3");
+        //商人初始化
+        merchantInit();
         //屏幕设定
         Scene scene = new Scene(vbox);
         //怪物手册和商人老兵弹出框初始化
@@ -268,6 +276,36 @@ public class Game extends Application {
             for (int i = 1; i < 9; i++) monsterInfo.add(gettext(tempString[i]),i,row);
         }
     }
+    //与商人对话
+    public void merchantTalk(Merchant mer,Player player) {
+        merchant.getChildren().clear();
+        merchant.setVisible(true);
+        merchant.requestFocus();
+        merchant.add(choose_1,1,3);
+        merchant.add(choose_2,2,3);
+        merchant.add(choose_3,3,3);
+        merchant.add(choose_4,4,3);
+        choose_1.setOnAction(e -> {mer.buyGood_1(this,player); });
+        choose_2.setOnAction(e -> {mer.buyGood_2(this,player); });
+        choose_3.setOnAction(e -> {mer.buyGood_3(this,player); });
+        choose_4.setOnAction(e -> mer.buyGood_4(this,player));
+        merchant.add(gettext("商品名称:"),0,0);
+        merchant.add(gettext("商品说明:"),0,1);
+        merchant.add(gettext("购买价格:"),0,2);
+        //加载商品说明
+        merchant.add(gettext(mer.getGood_1(0)),1,0);
+        merchant.add(gettext(mer.getGood_1(1)),1,1);
+        merchant.add(gettext(mer.getGood_1(2)),1,2);
+        merchant.add(gettext(mer.getGood_2(0)),2,0);
+        merchant.add(gettext(mer.getGood_2(1)),2,1);
+        merchant.add(gettext(mer.getGood_2(2)),2,2);
+        merchant.add(gettext(mer.getGood_3(0)),3,0);
+        merchant.add(gettext(mer.getGood_3(1)),3,1);
+        merchant.add(gettext(mer.getGood_3(2)),3,2);
+        merchant.add(gettext(mer.getGood_4(0)),4,0);
+        merchant.add(gettext(mer.getGood_4(1)),4,1);
+        merchant.add(gettext(mer.getGood_4(2)),4,2);
+    }
     //更新弹出框
     public void setGamePopup(Lattice lattice,String string) {
         gamePopup.setVisible(true);
@@ -364,7 +402,7 @@ public class Game extends Application {
                 "商人处可以花钱买东西，老人则可以对经验丰富的勇者作出指导\n" +
                 "获胜方式:\n" +
                 "拾取第五层的最终宝物即可获胜\n\n\n";
-        Text text=new Text(help);
+        Text text = new Text(help);
         text.setFont(Font.loadFont("file:resources/fonts/Zfull-GB.ttf",18));
         gamePopup.getChildren().add(text);
         gamePopup.requestFocus();
@@ -448,18 +486,23 @@ public class Game extends Application {
     //游戏存档
     private void gameSave() throws FileNotFoundException {
         Map.mapSave("save",motaGame,0);
+        updateStatus(player);
     }
     //游戏读档
     private void gameLoad() throws FileNotFoundException {
         motaGame = Map.mapLoad("save",0);
+        player=motaGame.getPlayer();
         setGamePlayground(motaGame);
+        updateStatus(player);
     }
     //撤销
     private void gameUndo() throws FileNotFoundException {
         if (turn > 0) {
             turn--;
             motaGame = Map.mapLoad("redo",turn);
+            player=motaGame.getPlayer();
             setGamePlayground(motaGame);
+            updateStatus(player);
         }//防止过度撤销
     }
     //重做
@@ -467,13 +510,17 @@ public class Game extends Application {
         if (turn < maxTurn) {
             turn++;
             motaGame = Map.mapLoad("redo",turn);
+            player=motaGame.getPlayer();
             setGamePlayground(motaGame);
+            updateStatus(player);
         }//防止过度重做
     }
     //重启
     public void gameRestart() throws FileNotFoundException {
         motaGame = Map.mapLoad("redo",0);
         setGamePlayground(motaGame);
+        player=motaGame.getPlayer();
+        updateStatus(player);
     }
     //每轮为重做存档
     public void gameSaveForUndo() throws FileNotFoundException {
@@ -505,6 +552,25 @@ public class Game extends Application {
         gamePopup.setMaxHeight(120);
         gamePopup.setOnKeyPressed(event -> {if (event.getCode() != KeyCode.H) gamePopup.setVisible(false);});
         gamePopup.setMaxWidth(624);
+    }
+    //商人界面初始化
+    private void merchantInit() {
+        int buttonWidth = 80, buttonHeight = 30;
+        merchant.setAlignment(Pos.CENTER);
+        merchant.setStyle("-fx-background-color:rgba(239,221,173,0.8);");
+        merchant.setVisible(false);
+        merchant.setHgap(20); merchant.setVgap(20);
+        merchant.setMaxSize(624,400);
+        merchant.setOnKeyPressed(event -> merchant.setVisible(false));
+        choose_1.setStyle("-fx-font-size: 12;" + "-fx-text-fill:#FFFFFF;" + "-fx-background-image: url('file:pic/Background/选项按钮背景.jpg');");
+        choose_2.setStyle("-fx-font-size: 12;" + "-fx-text-fill:#FFFFFF;" + "-fx-background-image: url('file:pic/Background/选项按钮背景.jpg');");
+        choose_3.setStyle("-fx-font-size: 12;" + "-fx-text-fill:#FFFFFF;" + "-fx-background-image: url('file:pic/Background/选项按钮背景.jpg');");
+        choose_4.setStyle("-fx-font-size: 12;" + "-fx-text-fill:#FFFFFF;" + "-fx-background-image: url('file:pic/Background/选项按钮背景.jpg');");
+        choose_1.setPrefSize(buttonWidth,buttonHeight);
+        choose_2.setPrefSize(buttonWidth,buttonHeight);
+        choose_3.setPrefSize(buttonWidth,buttonHeight);
+        choose_4.setPrefSize(buttonWidth,buttonHeight);
+        gameArea.getChildren().add(merchant);
     }
     //按钮初始化
     private void buttonsInit() {

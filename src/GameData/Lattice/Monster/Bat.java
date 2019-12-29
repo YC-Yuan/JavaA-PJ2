@@ -9,7 +9,7 @@ public class Bat extends Monster {
     private double poisonRate;
     private int poisonDamage, rateDamageSum = 0, poisonDamageSum = 0;
 
-    public Bat(int hp,int atk,int def,int mon,int exp,double poisonRate,int poisonDamage,String name) {
+    Bat(int hp,int atk,int def,int mon,int exp,double poisonRate,int poisonDamage,String name) {
         this.hp = hp; this.atk = atk; this.def = def; this.mon = mon; this.exp = exp;
         this.poisonRate = poisonRate; this.poisonDamage = poisonDamage; this.name = name;
     }
@@ -46,8 +46,8 @@ public class Bat extends Monster {
                 isPoisoned = true; //(name + "的攻击使勇者中毒，每回合都受到额外伤害");}
             }
             Game.addDisplayText(name + "共造成了" + rateDamageSum + "点百分比毒伤" + poisonDamageSum + "点毒素额外伤害");
-            fightEnd(player);
         }
+        fightEnd(player);
     }
 
     public String[] fightPlan(Player player) {
@@ -78,8 +78,8 @@ public class Bat extends Monster {
         if (player.getHealth() > 0)
             strings[7] = String.valueOf(originalHealthPoint - player.getHealth());//预计损血
         else strings[7] = "无法击败";
-        strings[8] = "百分比毒伤:" + (int) poisonRate * 100 + "% 毒素额外伤害:" + poisonDamage + "\n" +
-                "共造成百分比毒伤" + rateDamageSum + "和毒素额外伤害" + poisonDamageSum + "\n" +
+        strings[8] = "百分比毒伤:" + (int)(poisonRate * 100) + "% 毒素额外伤害:" + poisonDamage + "\n" +
+                "共造成百分比毒伤" + rateDamageSum + ",额外伤害" + poisonDamageSum + "\n" +
                 "攻击后使勇者中毒\n每回合造成额外伤害";
         return strings;
     }

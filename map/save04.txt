@@ -8,10 +8,10 @@ bbbbbbwbbbbbb
 bpppuaaaupppb
 bbbbbaaabbbbb
 bnbpsaaaspbmb
-bnbbbaaabbbmb
+bnlbbaaabbkmb
 bnppwajawoomb
 bbbbbbbbbbbbb
-0 7 6
-1 0
-1000 1000 10 10 0
-0 0 0
+1 9 10
+1 90
+355 1000 14 16 9
+3 0 0

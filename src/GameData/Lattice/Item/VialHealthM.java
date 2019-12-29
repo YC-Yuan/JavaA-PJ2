@@ -8,10 +8,10 @@ import java.io.FileNotFoundException;
 
 public class VialHealthM extends Lattice {
     public void affectWith(Game game,Player player) throws FileNotFoundException {
-        player.changeHealth(100);
+        player.changeHealth(200);
         game.musicAudioPlay(getAudio());
         game.gameSaveForUndo();
-        game.setGamePopup(this,"捡到中血瓶，恢复100生命");
+        game.setGamePopup(this,"捡到中血瓶，恢复200生命");
         Game.addDisplayText("喝下中血瓶，血气方刚！");
     }
 

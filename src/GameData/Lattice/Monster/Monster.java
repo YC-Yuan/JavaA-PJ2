@@ -15,6 +15,7 @@ public class Monster extends Lattice {
     void fightEnd(Player player) {
         if (player.getHealth() == 0) {
             this.isBeaten=false;
+            Game.addDisplayText(name+"打败了勇者，请重新来过");
         }
         else {
             //击败怪物

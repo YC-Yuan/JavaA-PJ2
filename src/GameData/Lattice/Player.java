@@ -1,6 +1,6 @@
 package GameData.Lattice;
 
-public class Player extends Lattice implements Cloneable{
+public class Player extends Lattice implements Cloneable {
     public String getCode() {return "B";}
 
     public String getGraphic() {return "file:pic/Lattice/Player.png";}
@@ -50,21 +50,21 @@ public class Player extends Lattice implements Cloneable{
 
     //等级经验相关
     public int getExperience() {return experience;}
-    public void changeExperience(int change) {experience += change; checkLevel();}
+    public void changeExperience(int change) {experience += change;}
     public int getExpNeed() {
         int initialExpNeed = 100; double growthRateExp = 1.6;
         return (int) (initialExpNeed * Math.pow(growthRateExp,level - 1));
     }
 
     public int getLevel() {return level;}
-    private void checkLevel() {
+    public void checkLevel() {
         int initialExpNeed = 100; double growthRateExp = 1.6;
-        while ((int) (initialExpNeed * Math.pow(growthRateExp,level - 1)) <= experience) {
+        if ((int) (initialExpNeed * Math.pow(growthRateExp,level - 1)) <= experience) {
             experience -= (int) (initialExpNeed * Math.pow(growthRateExp,level - 1));
             levelUp();
         }
     }
-    private void levelUp() { level++; healthMax += 100; health = healthMax; attack += 2; defence += 2; }
+    private void levelUp() { level++; healthMax += 100; changeHealth(healthMax/2); attack += 2; defence += 2; }
 
     //位置相关
     public int[] getPosition() {return position;}
