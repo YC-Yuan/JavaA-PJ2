@@ -34,7 +34,9 @@ public class Game extends Application {
     private static int addNum = 0, addTimes = 0;
     private MotaGame motaGame = Map.mapLoad("redo",turn);
     private Player player = motaGame.getPlayer();
+
     Game() throws FileNotFoundException {}
+
     //GUI设定
     private final static int LENGTH = 48;
     private final static int PADDLE = 20;
@@ -133,12 +135,10 @@ public class Game extends Application {
             }
         });
         //鼠标点击控制人物移动
-        gameArea.setOnMouseClicked(e -> {
-            moveWhenClicked(getClickedPosition((int) e.getX(),(int) e.getY()));
-        });
+        gameArea.setOnMouseClicked(e -> moveWhenClicked(getClickedPosition((int) e.getX(),(int) e.getY())));
         //按钮事件
-        btBgm.setOnAction(event -> {useBtBGM();});
-        btAudio.setOnAction(event -> {useBtAudio();});
+        btBgm.setOnAction(event -> useBtBGM());
+        btAudio.setOnAction(event -> useBtAudio());
         btUndo.setOnAction(event -> { try { gameUndo(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } });
         btRedo.setOnAction(event -> { try { gameRedo(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } });
         btSave.setOnAction(event -> { try { gameSave(); } catch (FileNotFoundException ex) { ex.printStackTrace(); } });
@@ -155,6 +155,7 @@ public class Game extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
     //使用怪物手册
     private void monsterInfo(MotaGame motaGame) throws CloneNotSupportedException {
         final int LENGTH = 32;
@@ -280,6 +281,7 @@ public class Game extends Application {
             for (int i = 1; i < 9; i++) monsterInfo.add(gettext(tempString[i]),i,row);
         }
     }
+
     //与商人对话
     public void merchantTalk(Merchant mer,Player player) {
         merchant.getChildren().clear();
@@ -289,9 +291,9 @@ public class Game extends Application {
         merchant.add(choose_2,2,3);
         merchant.add(choose_3,3,3);
         merchant.add(choose_4,4,3);
-        choose_1.setOnAction(e -> {mer.buyGood_1(this,player); });
-        choose_2.setOnAction(e -> {mer.buyGood_2(this,player); });
-        choose_3.setOnAction(e -> {mer.buyGood_3(this,player); });
+        choose_1.setOnAction(e -> mer.buyGood_1(this,player));
+        choose_2.setOnAction(e -> mer.buyGood_2(this,player));
+        choose_3.setOnAction(e -> mer.buyGood_3(this,player));
         choose_4.setOnAction(e -> mer.buyGood_4(this,player));
         merchant.add(gettext("商品名称:"),0,0);
         merchant.add(gettext("商品说明:"),0,1);
@@ -310,6 +312,7 @@ public class Game extends Application {
         merchant.add(gettext(mer.getGood_4(1)),4,1);
         merchant.add(gettext(mer.getGood_4(2)),4,2);
     }
+
     //更新弹出框
     public void setGamePopup(Lattice lattice,String string) {
         gamePopup.setVisible(true);
@@ -320,11 +323,13 @@ public class Game extends Application {
         text.setFont(Font.loadFont("file:resources/fonts/Zfull-GB.ttf",20));
         gamePopup.getChildren().add(text);
     }
+
     //将字符串添加到右下日志区的text中
     public static void addDisplayText(String add) {
         text.add(add + "\n");
         addNum++;
     }
+
     //功能函数生成特定大小的ImageView
     private ImageView getImageView(String path,int length) {
         Image image = new Image(path);
@@ -333,27 +338,32 @@ public class Game extends Application {
         imageView.setFitHeight(length);
         return imageView;
     }
+
     //功能函数生成像素字体
     private Text getText(String string) {
         Text text = new Text(string);
         text.setFont(Font.loadFont("file:resources/fonts/swfit.ttf",20));
         return text;
     }
+
     private Text getText(int num) {
         String string = String.valueOf(num);
         Text text = new Text(string);
         text.setFont(Font.loadFont("file:resources/fonts/swfit.ttf",20));
         return text;
     }
+
     private Text gettext(String string) {
         Text text = new Text(string);
         text.setFont(Font.loadFont("file:resources/fonts/Zfull-GB.ttf",12));
         return text;
     }
+
     //从开始界面弹出本窗口
     void showWindow() {
         start(stage);
     }
+
     //BGM播放
     private void musicBGMPlay(String paths) {
         Media mediaSource = new Media(Paths.get(paths).toUri().toString());
@@ -362,6 +372,7 @@ public class Game extends Application {
         mediaBGM.setAutoPlay(true);
         mediaBGM.setCycleCount(40);
     }
+
     //音效播放
     public void musicAudioPlay(String paths) {
         Media mediaSource = new Media(Paths.get(paths).toUri().toString());
@@ -369,21 +380,23 @@ public class Game extends Application {
         mediaAudio.setVolume(audioVolume);
         mediaAudio.setAutoPlay(true);
     }
+
     //音乐按钮功能打包
     private void useBtBGM() {
         if (bgmVolume == 0) {
             bgmVolume = 0.4;
-            mediaBGM.setVolume(bgmVolume);
         }
         else {
             bgmVolume = 0;
-            mediaBGM.setVolume(bgmVolume);
         }
+        mediaBGM.setVolume(bgmVolume);
     }
+
     private void useBtAudio() {
         if (audioVolume == 0) audioVolume = 1;
         else audioVolume = 0;
     }
+
     //帮助手册按钮功能
     private void useBtHelp() {
         gamePopup.setVisible(true);
@@ -413,10 +426,12 @@ public class Game extends Application {
         gamePopup.getChildren().add(text);
         gamePopup.requestFocus();
     }
+
     //用于实现鼠标点击移动
     private int[] getClickedPosition(int X,int Y) {
         return new int[] {(Y - 20) / 48,(X - 20) / 48};
     }
+
     private void moveWhenClicked(int[] clicked) {
         int[] position = player.getPosition().clone();
         if (clicked[0] == position[0] - 1 & clicked[1] == position[1] ||
@@ -428,6 +443,7 @@ public class Game extends Application {
             }
         }
     }
+
     //生成叠底用GridPane
     private void setGameBackground() {
         gameBackground.setAlignment(Pos.TOP_LEFT);
@@ -445,6 +461,7 @@ public class Game extends Application {
             }
         }
     }
+
     //基于现有的MotaGame改变游戏显示
     public void setGamePlayground(MotaGame motaGame) {
         Player player = motaGame.getPlayer();
@@ -469,6 +486,7 @@ public class Game extends Application {
             }
         }
     }
+
     //日志区动态刷新
     public void updateDisplay() {
         int changeNum = addNum;
@@ -504,11 +522,13 @@ public class Game extends Application {
             displayText.textProperty().bind(service.messageProperty()); service.restart();
         }
     }
+
     //游戏存档
     private void gameSave() throws FileNotFoundException {
         Map.mapSave("save",motaGame,0);
         updateStatus(player);
     }
+
     //游戏读档
     void gameLoad() throws FileNotFoundException {
         motaGame = Map.mapLoad("save",0);
@@ -516,6 +536,7 @@ public class Game extends Application {
         setGamePlayground(motaGame);
         updateStatus(player);
     }
+
     //撤销
     private void gameUndo() throws FileNotFoundException {
         if (turn > 0) {
@@ -526,6 +547,7 @@ public class Game extends Application {
             updateStatus(player);
         }//防止过度撤销
     }
+
     //重做
     private void gameRedo() throws FileNotFoundException {
         if (turn < maxTurn) {
@@ -536,6 +558,7 @@ public class Game extends Application {
             updateStatus(player);
         }//防止过度重做
     }
+
     //重启
     public void gameRestart() throws FileNotFoundException {
         motaGame = Map.mapLoad("redo",0);
@@ -543,16 +566,19 @@ public class Game extends Application {
         player = motaGame.getPlayer();
         updateStatus(player);
     }
+
     //每轮为重做存档
     public void gameSaveForUndo() throws FileNotFoundException {
         updateTurn();
         Map.mapSave("redo",motaGame,turn);
     }
+
     //轮次增加
     private void updateTurn() {
         turn++;
         maxTurn = Math.max(turn,maxTurn);
     }
+
     //怪物手册初始化
     private void monsterInfoInit() {
         monsterInfo.setAlignment(Pos.CENTER);
@@ -564,6 +590,7 @@ public class Game extends Application {
         monsterInfo.setMaxWidth(624);
         monsterInfo.setOnKeyPressed(event -> {if (event.getCode() != KeyCode.F) monsterInfo.setVisible(false);});
     }
+
     //弹出框初始化
     private void gamePopupInit() {
         gamePopup.setAlignment(Pos.CENTER);
@@ -574,6 +601,7 @@ public class Game extends Application {
         gamePopup.setOnKeyPressed(event -> {if (event.getCode() != KeyCode.H) gamePopup.setVisible(false);});
         gamePopup.setMaxWidth(624);
     }
+
     //商人界面初始化
     private void merchantInit() {
         int buttonWidth = 80, buttonHeight = 30;
@@ -593,6 +621,7 @@ public class Game extends Application {
         choose_4.setPrefSize(buttonWidth,buttonHeight);
         gameArea.getChildren().add(merchant);
     }
+
     //按钮初始化
     private void buttonsInit() {
         final int height = 35, width = 123;
@@ -610,6 +639,7 @@ public class Game extends Application {
         btSave.setPrefSize(width,height); btLoad.setPrefSize(width,height);
         btUndo.setPrefSize(width,height); btRedo.setPrefSize(width,height);
     }
+
     //status更新
     public void updateStatus(Player player) {
         statusLv.getChildren().clear();
@@ -634,9 +664,10 @@ public class Game extends Application {
         statusKey.getChildren().add(getImageView("file:pic/Status/红钥匙.png",LENGTH));
         statusKey.getChildren().add(getText(player.getKeyRedNum()));
     }
+
     //显示区初始化
     private void panelInit() {
-        final int LENGTH = 32, width = 596, height = 624;
+        final int width = 596, height = 624;
         //panel
         panel.setStyle("-fx-background-color:rgba(228,255,193,0.7);");
         panel.setMaxSize(width,height);
