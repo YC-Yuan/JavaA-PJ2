@@ -33,6 +33,7 @@ public class Merchant extends Lattice {
         game.merchantTalk(this,player);
         game.updateDisplay();
         game.updateStatus(player);
+        game.musicAudioPlay("audio/购买.mp3");
     }
 
     public String getGood_2(int num) {
@@ -54,6 +55,7 @@ public class Merchant extends Lattice {
         game.merchantTalk(this,player);
         game.updateDisplay();
         game.updateStatus(player);
+        game.musicAudioPlay("audio/购买.mp3");
     }
 
     public String getGood_3(int num) {
@@ -87,6 +89,7 @@ public class Merchant extends Lattice {
         game.merchantTalk(this,player);
         game.updateDisplay();
         game.updateStatus(player);
+        game.musicAudioPlay("audio/购买.mp3");
     }
 
     public String getGood_4(int num) {
@@ -112,6 +115,7 @@ public class Merchant extends Lattice {
         game.merchantTalk(this,player);
         game.updateDisplay();
         game.updateStatus(player);
+        game.musicAudioPlay("audio/购买.mp3");
     }
 
     public void affectWith(Game game,Player player) throws FileNotFoundException {

@@ -18,6 +18,7 @@ public class Veteran extends Lattice {
             Game.addDisplayText("勇者升到了" + player.getLevel() + "级！");
             Game.addDisplayText("生命上限+100,恢复50%血量,攻击防御+2");
             game.setGamePopup(this,"老人悉心指导\n勇者更懂得如何运用他的力量了");
+            game.musicAudioPlay("audio/升级.mp3");
         }
         game.gameSaveForUndo();
     }
